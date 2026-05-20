@@ -1,0 +1,183 @@
+/* AIMAR dimensional interface pass: curved-glass monitor illusion. */
+:root {
+  --aimar-depth-perspective: 1500px;
+  --aimar-screen-curve: 18deg;
+}
+
+body.aimar-morph-ready {
+  perspective: var(--aimar-depth-perspective);
+  perspective-origin: 50% 46%;
+}
+
+body.aimar-morph-ready #root::before {
+  content: '';
+  position: fixed;
+  inset: 48px 14px 12px;
+  z-index: 2;
+  pointer-events: none;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 34px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,.12), transparent 28%),
+    radial-gradient(ellipse at 50% 100%, rgba(119,247,255,.08), transparent 34%),
+    linear-gradient(90deg, rgba(255,255,255,.055), transparent 9% 91%, rgba(255,255,255,.055));
+  box-shadow:
+    inset 18px 0 42px rgba(255,255,255,.025),
+    inset -18px 0 42px rgba(119,247,255,.035),
+    inset 0 0 100px rgba(0,0,0,.34),
+    0 0 70px rgba(119,247,255,.045);
+  mix-blend-mode: screen;
+}
+
+body.aimar-morph-ready #root::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at center, transparent 45%, rgba(0,0,0,.18) 72%, rgba(0,0,0,.42) 100%),
+    linear-gradient(90deg, rgba(255,255,255,.035), transparent 18% 82%, rgba(119,247,255,.03));
+}
+
+body.aimar-morph-ready main {
+  perspective: var(--aimar-depth-perspective);
+  transform-style: preserve-3d;
+}
+
+body.aimar-morph-ready main section {
+  position: relative;
+  transform-style: preserve-3d;
+  isolation: isolate;
+}
+
+body.aimar-morph-ready main section > div:first-child {
+  position: relative;
+  transform-style: preserve-3d;
+  transition:
+    transform 480ms cubic-bezier(.16, 1, .3, 1),
+    filter 480ms cubic-bezier(.16, 1, .3, 1),
+    opacity 480ms cubic-bezier(.16, 1, .3, 1);
+}
+
+body.aimar-morph-ready main section > div:first-child::before,
+body.aimar-morph-ready main section > div:first-child::after {
+  content: '';
+  position: absolute;
+  inset: -18px;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 38px;
+}
+
+body.aimar-morph-ready main section > div:first-child::before {
+  background:
+    linear-gradient(90deg, rgba(119,247,255,.12), transparent 14% 86%, rgba(139,92,246,.10)),
+    radial-gradient(ellipse at 50% 50%, transparent 54%, rgba(119,247,255,.055) 72%, transparent 82%);
+  filter: blur(18px);
+  opacity: .82;
+}
+
+body.aimar-morph-ready main section > div:first-child::after {
+  border: 1px solid rgba(255,255,255,.075);
+  box-shadow:
+    inset 38px 0 56px rgba(255,255,255,.026),
+    inset -38px 0 56px rgba(119,247,255,.032),
+    inset 0 0 80px rgba(0,0,0,.22);
+}
+
+body.aimar-morph-ready aside {
+  transform-origin: right center;
+  transform: perspective(1200px) rotateY(5deg) translateZ(14px);
+  box-shadow: 18px 0 55px rgba(0,0,0,.26), inset -1px 0 0 rgba(119,247,255,.08);
+}
+
+body.aimar-morph-ready header {
+  transform: translateZ(28px);
+}
+
+body.aimar-morph-ready footer {
+  transform: translateZ(24px);
+}
+
+body.aimar-morph-ready main section > div:first-child > div {
+  transform-style: preserve-3d;
+}
+
+body.aimar-morph-ready main section > div:first-child .motion-card,
+body.aimar-morph-ready main section > div:first-child table,
+body.aimar-morph-ready main section > div:first-child .aurora-orb {
+  transform: translateZ(18px);
+}
+
+body.aimar-morph-ready main section > div:first-child h1,
+body.aimar-morph-ready main section > div:first-child h2 {
+  transform: translateZ(36px);
+}
+
+body.aimar-morph-ready main section > div:first-child p,
+body.aimar-morph-ready main section > div:first-child a,
+body.aimar-morph-ready main section > div:first-child button {
+  transform: translateZ(22px);
+}
+
+body.aimar-morph-forward main section > div:first-child {
+  animation: aimarCurveForward 680ms cubic-bezier(.16,1,.3,1) both !important;
+}
+
+body.aimar-morph-back main section > div:first-child {
+  animation: aimarCurveBack 680ms cubic-bezier(.16,1,.3,1) both !important;
+}
+
+body.aimar-morph-settle main section > div:first-child {
+  animation: aimarCurveSettle 720ms cubic-bezier(.16,1,.3,1) both !important;
+}
+
+@keyframes aimarCurveForward {
+  0% { opacity: 1; transform: rotateY(0deg) rotateX(0deg) translateZ(0) scale(1); filter: blur(0) saturate(1); }
+  38% { opacity: .28; transform: rotateY(-11deg) rotateX(1.5deg) translateX(-62px) translateZ(-70px) scale(.94); filter: blur(13px) saturate(1.55); }
+  54% { opacity: .12; transform: rotateY(14deg) rotateX(-1deg) translateX(76px) translateZ(-110px) scale(.91); filter: blur(18px) saturate(1.75); }
+  100% { opacity: 1; transform: rotateY(0deg) rotateX(0deg) translateZ(0) scale(1); filter: blur(0) saturate(1); }
+}
+
+@keyframes aimarCurveBack {
+  0% { opacity: 1; transform: rotateY(0deg) rotateX(0deg) translateZ(0) scale(1); filter: blur(0) saturate(1); }
+  38% { opacity: .28; transform: rotateY(11deg) rotateX(1.5deg) translateX(62px) translateZ(-70px) scale(.94); filter: blur(13px) saturate(1.55); }
+  54% { opacity: .12; transform: rotateY(-14deg) rotateX(-1deg) translateX(-76px) translateZ(-110px) scale(.91); filter: blur(18px) saturate(1.75); }
+  100% { opacity: 1; transform: rotateY(0deg) rotateX(0deg) translateZ(0) scale(1); filter: blur(0) saturate(1); }
+}
+
+@keyframes aimarCurveSettle {
+  0% { opacity: .22; transform: rotateX(3deg) translateY(18px) translateZ(-86px) scale(.945); filter: blur(14px) saturate(1.4); }
+  62% { opacity: 1; transform: rotateX(-.8deg) translateY(-4px) translateZ(18px) scale(1.012); filter: blur(0) saturate(1.08); }
+  100% { opacity: 1; transform: rotateX(0deg) translateY(0) translateZ(0) scale(1); filter: blur(0) saturate(1); }
+}
+
+body.aimar-morph-ready .aurora-orb {
+  transform: translateZ(52px) scale(1.04) !important;
+  box-shadow:
+    inset 0 1px 32px rgba(255,255,255,.10),
+    0 0 100px rgba(119,247,255,.32),
+    0 20px 80px rgba(0,0,0,.32);
+}
+
+body.aimar-morph-ready .aurora-orb::before {
+  transform: translateZ(-20px) rotateX(62deg);
+}
+
+body.aimar-morph-ready .aurora-orb::after {
+  transform: translateZ(-48px) rotateX(68deg);
+}
+
+@media (max-width: 900px) {
+  body.aimar-morph-ready #root::before { inset: 42px 8px 8px; border-radius: 24px; }
+  body.aimar-morph-ready aside { transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.aimar-morph-forward main section > div:first-child,
+  body.aimar-morph-back main section > div:first-child,
+  body.aimar-morph-settle main section > div:first-child {
+    animation: none !important;
+  }
+}
