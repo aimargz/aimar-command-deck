@@ -22,34 +22,37 @@ function canClick(button) {
   return button && !button.disabled && button.getAttribute('aria-disabled') !== 'true';
 }
 
-function ensureToolsLink() {
-  if (document.querySelector('.aimar-tools-link')) return;
+function ensureFloatingLink(href, className, text, bottom) {
+  if (document.querySelector(`.${className}`)) return;
   const link = document.createElement('a');
-  link.href = '/nested-tools.html';
-  link.className = 'aimar-tools-link';
-  link.textContent = 'Nested Tools';
+  link.href = href;
+  link.className = `aimar-floating-link ${className}`;
+  link.textContent = text;
+  link.style.bottom = bottom;
   document.body.appendChild(link);
+}
+
+function ensureToolLinks() {
+  ensureFloatingLink('/nested-tools.html', 'aimar-tools-link', 'Nested Tools', '86px');
+  ensureFloatingLink('/about.html', 'aimar-about-link', 'What Aimar Does', '132px');
+  ensureFloatingLink('/contact.html', 'aimar-contact-link', 'Contact', '178px');
 }
 
 function route(direction) {
   if (locked) return;
   if (isTypingTarget(document.activeElement)) return;
-
   const { prev, next } = getFooterButtons();
   const button = direction > 0 ? next : prev;
   if (!canClick(button)) return;
-
   locked = true;
   const body = document.body;
   body.classList.remove('aimar-morph-forward', 'aimar-morph-back', 'aimar-morph-settle');
   body.classList.add(direction > 0 ? 'aimar-morph-forward' : 'aimar-morph-back');
-
   window.setTimeout(() => {
     button.click();
     body.classList.remove('aimar-morph-forward', 'aimar-morph-back');
     body.classList.add('aimar-morph-settle');
   }, Math.floor(AIMAR_MORPH_MS * 0.48));
-
   window.setTimeout(() => {
     body.classList.remove('aimar-morph-settle');
     locked = false;
@@ -89,7 +92,7 @@ function onTouchEnd(event) {
 
 function boot() {
   document.body.classList.add('aimar-morph-ready');
-  ensureToolsLink();
+  ensureToolLinks();
   window.addEventListener('wheel', onWheel, { passive: false });
   window.addEventListener('touchstart', onTouchStart, { passive: true });
   window.addEventListener('touchend', onTouchEnd, { passive: true });
