@@ -17,7 +17,10 @@ button, input, textarea { font: inherit; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes scan { 0% { transform: translateY(-100%); opacity: .06; } 50% { opacity: .18; } 100% { transform: translateY(120%); opacity: .04; } }
 @keyframes glowPulse { 0%,100% { opacity: .55; } 50% { opacity: 1; } }
-@keyframes signalDrift { 0% { transform: translateX(-30%); opacity: 0; } 35% { opacity: .25; } 100% { transform: translateX(80%); opacity: 0; } }
+@keyframes signalDrift { 0% { transform: translateX(-35%); opacity: 0; } 35% { opacity: .25; } 100% { transform: translateX(95%); opacity: 0; } }
+@keyframes terminalBlink { 0%, 45% { opacity: 1; } 46%, 100% { opacity: 0; } }
+@keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes tickerPulse { 0%,100% { opacity:.62; } 50% { opacity:1; } }
 
 .animate-fade-in { animation: fadeIn .35s ease-out both; }
 .glow-pulse { animation: glowPulse 2.4s ease-in-out infinite; }
@@ -31,8 +34,8 @@ button, input, textarea { font: inherit; }
   z-index: 1;
   pointer-events: none;
   background:
-    radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(89, 240, 255, .095), transparent 50%),
-    radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .045), transparent 58%);
+    radial-gradient(560px circle at var(--mx, 50%) var(--my, 50%), rgba(89, 240, 255, .105), transparent 50%),
+    radial-gradient(360px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, .045), transparent 58%);
   mix-blend-mode: screen;
 }
 
@@ -70,11 +73,39 @@ button, input, textarea { font: inherit; }
 
 .magnetic-button {
   will-change: transform;
-  transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, border-color .2s ease;
+  transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, border-color .2s ease, background-color .2s ease;
 }
 .magnetic-button:hover {
   box-shadow: 0 10px 30px rgba(0,0,0,.35), 0 0 26px rgba(89,240,255,.07);
 }
+
+.terminal-cursor::after {
+  content: '_';
+  color: #59f0ff;
+  animation: terminalBlink 1s step-end infinite;
+}
+
+.aurora-orb {
+  position: relative;
+  border-radius: 999px;
+}
+.aurora-orb::before,
+.aurora-orb::after {
+  content: '';
+  position: absolute;
+  inset: -22px;
+  border-radius: 999px;
+  border: 1px solid rgba(89,240,255,.13);
+  animation: orbit 22s linear infinite;
+}
+.aurora-orb::after {
+  inset: -42px;
+  border-color: rgba(255,255,255,.07);
+  animation-duration: 34s;
+  animation-direction: reverse;
+}
+
+.ticker-dot { animation: tickerPulse 1.8s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
