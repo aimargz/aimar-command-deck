@@ -1,0 +1,140 @@
+/* Aimar brand polish: softer wordmark, less all-caps aggression, safer hero spacing. */
+:root {
+  --aimar-brand: 'Aimar';
+  --aimar-cyan: #77f7ff;
+}
+
+body {
+  letter-spacing: normal;
+}
+
+body.aimar-brand-polish-ready header span.font-semibold,
+body.aimar-brand-polish-ready main section h1 {
+  text-transform: none !important;
+}
+
+body.aimar-brand-polish-ready main section h1 {
+  font-size: clamp(4.2rem, 9vw, 8.2rem) !important;
+  letter-spacing: -0.075em !important;
+  font-weight: 640 !important;
+  line-height: .92 !important;
+  text-shadow:
+    0 0 26px rgba(255,255,255,.18),
+    0 0 72px rgba(119,247,255,.16) !important;
+}
+
+body.aimar-brand-polish-ready main section h1::first-letter {
+  letter-spacing: -0.055em;
+}
+
+body.aimar-brand-polish-ready main section h1 + p {
+  letter-spacing: .28em !important;
+  text-transform: none !important;
+  font-size: 12px !important;
+  color: rgba(119,247,255,.86) !important;
+}
+
+body.aimar-brand-polish-ready main section h1 + p::after {
+  content: '' !important;
+}
+
+body.aimar-brand-polish-ready main section h1 + p + p {
+  max-width: 64rem !important;
+  font-size: clamp(1.15rem, 1.8vw, 1.55rem) !important;
+  line-height: 1.55 !important;
+  color: rgba(226,232,240,.80) !important;
+}
+
+/* Keep the hero from feeling cramped or clipping the command orb. */
+body.aimar-brand-polish-ready main section > div:first-child > div.flex.h-full.flex-col.items-center.justify-center.text-center {
+  justify-content: center !important;
+  min-height: min(68vh, 720px) !important;
+  padding: 5.25rem 3rem 3.25rem !important;
+  overflow: visible !important;
+  border-radius: 2.25rem !important;
+}
+
+body.aimar-brand-polish-ready main section > div:first-child > div.flex.h-full.flex-col.items-center.justify-center.text-center::before {
+  top: 24px !important;
+  letter-spacing: .16em !important;
+  content: 'Public command surface initialized' !important;
+  text-transform: none !important;
+}
+
+body.aimar-brand-polish-ready .aurora-orb {
+  width: 118px !important;
+  height: 118px !important;
+  margin-bottom: 3.25rem !important;
+  transform: translateZ(58px) scale(.96) !important;
+  overflow: visible !important;
+}
+
+body.aimar-brand-polish-ready .aurora-orb svg {
+  width: 58px !important;
+  height: 58px !important;
+  opacity: .92 !important;
+  filter: drop-shadow(0 0 16px rgba(119,247,255,.40));
+}
+
+body.aimar-brand-polish-ready .aurora-orb::before {
+  inset: -22px !important;
+  opacity: .58 !important;
+}
+
+body.aimar-brand-polish-ready .aurora-orb::after {
+  inset: -42px !important;
+  opacity: .38 !important;
+}
+
+/* Reduce harsh all-caps terminal feel while keeping the command-deck identity. */
+body.aimar-brand-polish-ready .font-mono.uppercase,
+body.aimar-brand-polish-ready [class*="uppercase"] {
+  letter-spacing: .16em;
+}
+
+body.aimar-brand-polish-ready aside .font-mono,
+body.aimar-brand-polish-ready header .font-mono,
+body.aimar-brand-polish-ready footer .font-mono {
+  letter-spacing: .14em !important;
+}
+
+body.aimar-brand-polish-ready aside button,
+body.aimar-brand-polish-ready header button,
+body.aimar-brand-polish-ready footer button {
+  text-transform: none !important;
+}
+
+body.aimar-brand-polish-ready aside {
+  background: rgba(5,8,13,.70) !important;
+}
+
+body.aimar-brand-polish-ready main section {
+  padding-top: 2.25rem !important;
+}
+
+body.aimar-brand-polish-ready #root::before {
+  inset: 54px 18px 14px !important;
+  border-radius: 38px !important;
+  opacity: .72 !important;
+}
+
+body.aimar-brand-polish-ready #root::after {
+  background:
+    radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,.14) 74%, rgba(0,0,0,.36) 100%),
+    linear-gradient(90deg, rgba(255,255,255,.025), transparent 18% 82%, rgba(119,247,255,.025)) !important;
+}
+
+/* Make active sidebar feel premium, less loud. */
+body.aimar-brand-polish-ready aside button.bg-white\/10 {
+  background: rgba(255,255,255,.085) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04), 0 0 28px rgba(119,247,255,.055);
+}
+
+@media (max-width: 900px) {
+  body.aimar-brand-polish-ready main section > div:first-child > div.flex.h-full.flex-col.items-center.justify-center.text-center {
+    padding: 4.75rem 1.35rem 2.75rem !important;
+  }
+  body.aimar-brand-polish-ready main section h1 {
+    font-size: clamp(3.6rem, 18vw, 5.8rem) !important;
+  }
+}
