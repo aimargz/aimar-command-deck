@@ -1,57 +1,56 @@
-/* Aimar V8: true spherical liquid-glass orb with live endpoint-network traffic. */
+/* Aimar V9: multi-axis liquid-glass gyroscope with live endpoint network. */
 :root{
   --aimar-cyan:#7defff;
   --aimar-blue:#78a7ff;
-  --aimar-violet:#9aa4ff;
-  --aimar-repel-x:0px;
-  --aimar-repel-y:0px;
   --aimar-bg-x:50%;
   --aimar-bg-y:28%;
+  --aimar-repel-x:0px;
+  --aimar-repel-y:0px;
+  --aimar-tilt-x:0deg;
+  --aimar-tilt-y:0deg;
+  --aimar-hover:0;
 }
 
-/* Spatial deck field: animated, calm, operational. */
+/* Spatial deck background: animated, but calm and operational. */
 body{
   background:
-    radial-gradient(circle at var(--aimar-bg-x) var(--aimar-bg-y), rgba(125,239,255,.11), transparent 30%),
-    radial-gradient(circle at 74% 20%, rgba(120,167,255,.085), transparent 34%),
+    radial-gradient(circle at var(--aimar-bg-x) var(--aimar-bg-y), rgba(125,239,255,.13), transparent 31%),
+    radial-gradient(circle at 76% 20%, rgba(120,167,255,.075), transparent 36%),
     radial-gradient(circle at 22% 84%, rgba(90,255,210,.035), transparent 38%),
     linear-gradient(180deg,#03070c 0%,#050a11 48%,#020409 100%)!important;
 }
 body::before{
-  opacity:.20!important;
+  opacity:.18!important;
   background:
-    radial-gradient(ellipse at 50% 16%, rgba(255,255,255,.08), transparent 24%),
-    radial-gradient(ellipse at 20% 50%, rgba(125,239,255,.075), transparent 40%),
-    radial-gradient(ellipse at 84% 56%, rgba(120,167,255,.065), transparent 43%),
-    linear-gradient(90deg, transparent 0 18%, rgba(125,239,255,.026) 31%, transparent 50% 56%, rgba(255,255,255,.024) 74%, transparent 100%)!important;
+    radial-gradient(ellipse at 50% 16%, rgba(255,255,255,.075), transparent 24%),
+    radial-gradient(ellipse at 20% 50%, rgba(125,239,255,.070), transparent 40%),
+    radial-gradient(ellipse at 84% 56%, rgba(120,167,255,.060), transparent 43%),
+    linear-gradient(90deg, transparent 0 18%, rgba(125,239,255,.024) 31%, transparent 50% 56%, rgba(255,255,255,.022) 74%, transparent 100%)!important;
   background-size:100% 100%!important;
   mask-image:radial-gradient(ellipse at center, black 0%, transparent 82%)!important;
-  animation:aimarDeckDrift 30s ease-in-out infinite alternate!important;
+  animation:aimarDeckDrift 32s ease-in-out infinite alternate!important;
 }
 body::after{
   opacity:.10!important;
   background:
-    linear-gradient(115deg, transparent 0 44%, rgba(125,239,255,.14) 49%, transparent 55%),
-    radial-gradient(circle at 20% 30%, rgba(125,239,255,.13) 0 1px, transparent 1.5px),
+    linear-gradient(115deg, transparent 0 44%, rgba(125,239,255,.13) 49%, transparent 55%),
+    radial-gradient(circle at 20% 30%, rgba(125,239,255,.12) 0 1px, transparent 1.5px),
     radial-gradient(circle at 70% 65%, rgba(226,244,255,.08) 0 1px, transparent 1.5px)!important;
-  background-size:280% 100%, 120px 120px, 168px 168px!important;
-  animation:aimarAmbientSweep 34s ease-in-out infinite alternate!important;
+  background-size:300% 100%, 132px 132px, 184px 184px!important;
+  animation:aimarAmbientSweep 38s ease-in-out infinite alternate!important;
 }
-@keyframes aimarDeckDrift{0%{transform:translate3d(-1%,0,0) scale(1)}100%{transform:translate3d(1%,.7%,0) scale(1.022)}}
-@keyframes aimarAmbientSweep{from{background-position:0% 50%,0 0,0 0}to{background-position:100% 50%,32px 48px,-42px 64px}}
 
-/* Hide only the old hardcoded icon children, not our injected network canvas. */
+/* Hide the old lucide command icon, but keep the injected gyroscope. */
 .aurora-orb>div.absolute,
 .aurora-orb>svg,
 .aurora-orb .aimar-neural-logo,
 .aurora-orb .aimar-logo-fallback{display:none!important}
 
-/* True circular liquid-chrome sphere. Width == height, aspect-ratio locked. */
 .aurora-orb{
-  width:162px!important;
-  height:162px!important;
+  width:190px!important;
+  height:190px!important;
   aspect-ratio:1/1!important;
-  margin-bottom:2.35rem!important;
+  margin-bottom:2.45rem!important;
   border:0!important;
   border-radius:50%!important;
   overflow:visible!important;
@@ -61,126 +60,140 @@ body::after{
   opacity:1!important;
   visibility:visible!important;
   cursor:crosshair!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  transform:translate3d(var(--aimar-repel-x),var(--aimar-repel-y),0) translateZ(72px) scale(var(--aimar-scale,1))!important;
+  transition:filter .28s ease!important;
+  perspective:720px!important;
+  transform-style:preserve-3d!important;
+  filter:drop-shadow(0 0 18px rgba(125,239,255,.18)) drop-shadow(0 0 58px rgba(120,167,255,.13));
+}
+.aurora-orb:hover{--aimar-scale:1.035;filter:drop-shadow(0 0 26px rgba(125,239,255,.34)) drop-shadow(0 0 82px rgba(120,167,255,.20))}
+
+.aimar-gyro{
+  position:relative;
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  transform-style:preserve-3d;
+  transform:rotateX(var(--aimar-tilt-x)) rotateY(var(--aimar-tilt-y));
+  transition:transform .22s cubic-bezier(.16,1,.3,1);
+}
+
+/* True circular liquid glass core. */
+.aimar-gyro-core{
+  position:absolute;
+  inset:38px;
+  border-radius:50%;
   background:
-    radial-gradient(circle at 31% 23%, rgba(255,255,255,.95) 0 2.6%, rgba(255,255,255,.38) 4%, transparent 16%),
-    radial-gradient(circle at 45% 38%, rgba(255,255,255,.22), transparent 24%),
-    radial-gradient(circle at 50% 50%, rgba(125,239,255,.24), transparent 34%),
-    radial-gradient(circle at 63% 68%, rgba(120,167,255,.17), transparent 42%),
-    radial-gradient(circle at 50% 94%, rgba(255,255,255,.15), transparent 24%),
-    linear-gradient(145deg, rgba(255,255,255,.23), rgba(125,239,255,.055) 34%, rgba(7,16,30,.20) 66%, rgba(255,255,255,.13)),
-    rgba(3,8,14,.16)!important;
+    radial-gradient(circle at 30% 24%, rgba(255,255,255,.95) 0 4%, rgba(255,255,255,.38) 5%, transparent 18%),
+    radial-gradient(circle at 45% 38%, rgba(255,255,255,.22), transparent 28%),
+    radial-gradient(circle at 50% 50%, rgba(125,239,255,.24), transparent 38%),
+    radial-gradient(circle at 64% 68%, rgba(120,167,255,.18), transparent 46%),
+    linear-gradient(145deg, rgba(255,255,255,.24), rgba(125,239,255,.055) 34%, rgba(7,16,30,.20) 66%, rgba(255,255,255,.12)),
+    rgba(3,8,14,.16);
   box-shadow:
-    inset 0 1px 22px rgba(255,255,255,.22),
-    inset 24px -20px 54px rgba(125,239,255,.060),
-    inset -26px 22px 64px rgba(120,167,255,.070),
-    inset 0 -26px 50px rgba(0,0,0,.18),
-    0 0 30px rgba(125,239,255,.18),
-    0 38px 90px rgba(0,0,0,.40)!important;
+    inset 0 1px 20px rgba(255,255,255,.22),
+    inset 18px -16px 42px rgba(125,239,255,.060),
+    inset -20px 18px 48px rgba(120,167,255,.070),
+    inset 0 -20px 42px rgba(0,0,0,.16),
+    0 0 34px rgba(125,239,255,.22),
+    0 26px 70px rgba(0,0,0,.42);
   backdrop-filter:blur(12px) saturate(160%);
   -webkit-backdrop-filter:blur(12px) saturate(160%);
-  transform:translate3d(var(--aimar-repel-x),var(--aimar-repel-y),0) translateZ(66px) scale(var(--aimar-logo-scale,1))!important;
-  transition:filter .26s ease, box-shadow .26s ease!important;
-  filter:drop-shadow(0 0 14px rgba(125,239,255,.20)) drop-shadow(0 0 42px rgba(120,167,255,.12))!important;
+  transform:translateZ(20px);
 }
-.aurora-orb:hover{
-  --aimar-logo-scale:1.038;
-  filter:drop-shadow(0 0 20px rgba(125,239,255,.42)) drop-shadow(0 0 78px rgba(120,167,255,.22))!important;
+.aimar-gyro-core::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:50%;
+  background:conic-gradient(from 220deg, transparent 0 18deg, rgba(255,255,255,.34) 30deg, rgba(125,239,255,.12) 45deg, transparent 70deg 170deg, rgba(255,255,255,.16) 190deg, transparent 220deg 360deg);
+  mask-image:radial-gradient(circle, transparent 0 26%, black 31% 100%);
+  animation:aimarChromeOrbit 18s linear infinite;
 }
-
-/* Chrome shell highlight/refraction layer. Circular, not oval. */
-.aurora-orb::before{
-  content:''!important;
-  display:block!important;
-  position:absolute!important;
-  inset:-1px!important;
-  width:auto!important;
-  height:auto!important;
-  aspect-ratio:1/1!important;
-  border-radius:50%!important;
-  pointer-events:none!important;
-  background:
-    conic-gradient(from 212deg, transparent 0 12deg, rgba(255,255,255,.34) 22deg, rgba(125,239,255,.14) 38deg, transparent 62deg 154deg, rgba(255,255,255,.18) 174deg, rgba(125,239,255,.13) 193deg, transparent 220deg 360deg),
-    radial-gradient(circle at 50% 50%, transparent 0 55%, rgba(125,239,255,.16) 58%, transparent 62%),
-    radial-gradient(circle at 35% 24%, rgba(255,255,255,.34), transparent 16%),
-    radial-gradient(circle at 58% 72%, rgba(120,167,255,.16), transparent 34%)!important;
-  mask-image:radial-gradient(circle, transparent 0 18%, black 21% 100%)!important;
-  filter:blur(.05px);
-  animation:aimarChromeOrbit 18s linear infinite!important;
+.aimar-gyro-core::after{
+  content:'';
+  position:absolute;
+  left:50%; top:50%;
+  width:8px; height:8px;
+  margin:-4px 0 0 -4px;
+  border-radius:50%;
+  background:#f4fdff;
+  box-shadow:0 0 18px rgba(125,239,255,.86),0 0 46px rgba(120,167,255,.34);
 }
 
-/* Outer node ring fallback if canvas is blocked. */
-.aurora-orb::after{
-  content:''!important;
-  display:block!important;
-  position:absolute!important;
-  inset:-52px!important;
-  aspect-ratio:1/1!important;
-  border-radius:50%!important;
-  pointer-events:none!important;
-  background:
-    conic-gradient(from 0deg, transparent 0 16deg, rgba(125,239,255,.28) 24deg, transparent 42deg 82deg, rgba(255,255,255,.20) 94deg, transparent 112deg 172deg, rgba(125,239,255,.23) 190deg, transparent 210deg 294deg, rgba(120,167,255,.18) 314deg, transparent 330deg 360deg),
-    radial-gradient(circle at 52% 6%, rgba(255,255,255,.88) 0 2.2px, transparent 3.2px),
-    radial-gradient(circle at 9% 62%, rgba(125,239,255,.64) 0 1.9px, transparent 3.2px),
-    radial-gradient(circle at 89% 68%, rgba(125,239,255,.60) 0 1.9px, transparent 3.2px),
-    radial-gradient(circle at 35% 91%, rgba(120,167,255,.46) 0 1.5px, transparent 2.8px)!important;
-  mask-image:radial-gradient(circle, transparent 0 41%, black 44% 50%, transparent 55%)!important;
-  opacity:.82!important;
-  animation:aimarNeuralOrbit 20s linear infinite!important;
+/* Multi-axis rings like a gyroscopic trainer. */
+.aimar-gyro-ring{
+  position:absolute;
+  inset:14px;
+  border-radius:50%;
+  border:1.6px solid rgba(226,248,255,.58);
+  box-shadow:0 0 18px rgba(125,239,255,.16), inset 0 0 18px rgba(255,255,255,.035);
+  transform-style:preserve-3d;
+  opacity:.82;
 }
+.aimar-gyro-ring::before{
+  content:'';
+  position:absolute;
+  inset:-2px;
+  border-radius:inherit;
+  border:1px solid rgba(125,239,255,.20);
+  filter:blur(.2px);
+}
+.aimar-gyro-ring.ring-a{transform:rotateX(68deg) rotateZ(0deg);animation:aimarRingA 13s linear infinite}
+.aimar-gyro-ring.ring-b{transform:rotateY(68deg) rotateZ(18deg);animation:aimarRingB 16s linear infinite reverse;border-color:rgba(125,239,255,.48)}
+.aimar-gyro-ring.ring-c{transform:rotateX(18deg) rotateY(60deg) rotateZ(90deg);animation:aimarRingC 19s linear infinite;border-color:rgba(180,220,255,.42);opacity:.72}
+.aimar-gyro-ring.ring-d{inset:31px;transform:rotateX(76deg) rotateZ(48deg);animation:aimarRingD 11s linear infinite;border-color:rgba(125,239,255,.32);opacity:.58}
 
-/* Live endpoint network canvas. */
+/* Endpoint traffic layer. */
 .aimar-orb-network{
-  display:block!important;
   position:absolute!important;
-  inset:-58px!important;
-  width:calc(100% + 116px)!important;
-  height:calc(100% + 116px)!important;
-  aspect-ratio:1/1!important;
-  z-index:2!important;
+  inset:-40px!important;
+  z-index:5!important;
   pointer-events:none!important;
-  opacity:.92!important;
   mix-blend-mode:screen;
+  opacity:.95!important;
 }
-.aimar-orb-network canvas{
-  display:block!important;
-  width:100%!important;
-  height:100%!important;
-  border-radius:50%!important;
-}
+.aimar-orb-network canvas{display:block!important;width:100%!important;height:100%!important;border-radius:50%!important}
 
 body.aimar-brand-polish-ready main section h1{
   font-size:clamp(4.25rem,8.1vw,7.25rem)!important;
   line-height:1!important;
-  letter-spacing:-.045em!important;
+  letter-spacing:-.04em!important;
   text-shadow:0 0 22px rgba(255,255,255,.10),0 0 54px rgba(125,239,255,.08)!important;
   cursor:crosshair!important;
   transition:letter-spacing .35s cubic-bezier(.16,1,.3,1),text-shadow .35s ease!important;
 }
-body.aimar-brand-polish-ready main section h1:hover{letter-spacing:-.036em!important;text-shadow:0 0 28px rgba(255,255,255,.14),0 0 72px rgba(125,239,255,.12)!important}
+body.aimar-brand-polish-ready main section h1:hover{letter-spacing:-.032em!important;text-shadow:0 0 28px rgba(255,255,255,.14),0 0 72px rgba(125,239,255,.12)!important}
 body.aimar-brand-polish-ready main section h1+p{margin-top:.95rem!important;letter-spacing:.20em!important;color:rgba(125,239,255,.70)!important;text-transform:none!important}
 body.aimar-brand-polish-ready main section h1+p+p{font-size:clamp(1.05rem,1.52vw,1.34rem)!important;line-height:1.55!important;max-width:58rem!important;margin-top:2rem!important;color:rgba(226,232,240,.76)!important}
-body.aimar-brand-polish-ready main section>div:first-child>div.flex.h-full.flex-col.items-center.justify-center.text-center{overflow:hidden!important;padding-top:4.7rem!important;background:radial-gradient(circle at 50% 24%,rgba(125,239,255,.075),transparent 25%),radial-gradient(circle at 67% 18%,rgba(120,167,255,.048),transparent 34%),linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.008))!important}
+body.aimar-brand-polish-ready main section>div:first-child>div.flex.h-full.flex-col.items-center.justify-center.text-center{overflow:hidden!important;padding-top:4.45rem!important;background:radial-gradient(circle at 50% 24%,rgba(125,239,255,.075),transparent 25%),radial-gradient(circle at 67% 18%,rgba(120,167,255,.048),transparent 34%),linear-gradient(180deg,rgba(255,255,255,.032),rgba(255,255,255,.008))!important}
 body.aimar-brand-polish-ready main section>div:first-child>div.flex.h-full.flex-col.items-center.justify-center.text-center::after{opacity:.05!important;background:linear-gradient(110deg,transparent 0 46%,rgba(125,239,255,.08) 50%,transparent 54%)!important;animation:aimarSlowSweep 24s ease-in-out infinite alternate!important}
 
 .aimar-header-mark{display:inline-grid!important;place-items:center;width:22px;height:22px;margin-right:4px;border-radius:50%;border:1px solid rgba(125,239,255,.24);background:radial-gradient(circle,rgba(125,239,255,.12),rgba(0,0,0,.16));box-shadow:0 0 10px rgba(125,239,255,.12)}
 .aimar-header-mark svg{display:none!important}.aimar-header-mark::before{content:'';width:6px;height:6px;border-radius:50%;background:#dffcff;box-shadow:0 0 8px rgba(125,239,255,.55)}
 
+@keyframes aimarDeckDrift{0%{transform:translate3d(-1%,0,0) scale(1)}100%{transform:translate3d(1%,.7%,0) scale(1.022)}}
+@keyframes aimarAmbientSweep{from{background-position:0% 50%,0 0,0 0}to{background-position:100% 50%,32px 48px,-42px 64px}}
+@keyframes aimarChromeOrbit{to{transform:rotate(360deg)}}
+@keyframes aimarRingA{to{transform:rotateX(68deg) rotateZ(360deg)}}
+@keyframes aimarRingB{to{transform:rotateY(68deg) rotateZ(378deg)}}
+@keyframes aimarRingC{to{transform:rotateX(18deg) rotateY(60deg) rotateZ(450deg)}}
+@keyframes aimarRingD{to{transform:rotateX(76deg) rotateZ(408deg)}}
 @keyframes aimarSlowSweep{from{transform:translateX(-2%)}to{transform:translateX(2%)}}
-@keyframes aimarChromeOrbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-@keyframes aimarNeuralOrbit{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 @media(max-width:900px){
-  .aurora-orb{width:126px!important;height:126px!important;margin-bottom:1.85rem!important}
-  .aurora-orb::after{inset:-42px!important;opacity:.76!important}
-  .aimar-orb-network{inset:-46px!important;width:calc(100% + 92px)!important;height:calc(100% + 92px)!important}
+  .aurora-orb{width:136px!important;height:136px!important;margin-bottom:1.85rem!important}
+  .aimar-gyro-core{inset:30px}.aimar-gyro-ring{inset:10px}.aimar-gyro-ring.ring-d{inset:24px}.aimar-orb-network{inset:-32px!important}
   body.aimar-brand-polish-ready main section{padding:1rem!important}
   body.aimar-brand-polish-ready main section>div:first-child>div.flex.h-full.flex-col.items-center.justify-center.text-center{min-height:calc(100svh - 210px)!important;padding:3.35rem 1.05rem 2.1rem!important;border-radius:1.65rem!important;justify-content:center!important}
   body.aimar-brand-polish-ready main section>div:first-child>div.flex.h-full.flex-col.items-center.justify-center.text-center::before{top:16px!important;font-size:8px!important;letter-spacing:.11em!important;padding:.42rem .62rem!important;max-width:86%;overflow:hidden;text-overflow:ellipsis}
-  body.aimar-brand-polish-ready main section h1{font-size:clamp(3.2rem,18vw,4.95rem)!important;letter-spacing:-.04em!important;line-height:.94!important;max-width:92vw!important}
+  body.aimar-brand-polish-ready main section h1{font-size:clamp(3.2rem,18vw,4.95rem)!important;letter-spacing:-.036em!important;line-height:.94!important;max-width:92vw!important}
   body.aimar-brand-polish-ready main section h1+p{font-size:10px!important;letter-spacing:.18em!important;margin-top:.9rem!important}
   body.aimar-brand-polish-ready main section h1+p+p{font-size:1rem!important;line-height:1.45!important;margin-top:1.45rem!important;max-width:92vw!important}
   body.aimar-brand-polish-ready main section h1+p+p:after{margin-top:1.3rem!important;width:70vw!important}
   body.aimar-brand-polish-ready main section h1+p+p+div{grid-template-columns:1fr!important;gap:.45rem!important;margin-top:1.25rem!important}
   body.aimar-brand-polish-ready main section h1+p+p+div>div{padding:.55rem .8rem!important;font-size:10px!important}
 }
-@media(prefers-reduced-motion:reduce){.aurora-orb,.aurora-orb::before,.aurora-orb::after{animation:none!important;transition:none!important}.aimar-orb-network{display:none!important}}
+@media(prefers-reduced-motion:reduce){.aimar-gyro-ring,.aimar-gyro-core::before{animation:none!important}.aimar-orb-network{display:none!important}}
