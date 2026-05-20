@@ -1,8 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { Activity, AlertTriangle, ChevronLeft, ChevronRight, Command, Database, GitMerge, LayoutGrid, Layers, Lock, Network, ShieldAlert, Sparkles, X, Zap } from 'lucide-react'
+import { Activity, AlertTriangle, ChevronLeft, ChevronRight, Command, Database, GitMerge, LayoutGrid, Layers, Lock, Network, ShieldAlert, X } from 'lucide-react'
 
 const ui = {
-  bg: 'bg-[#050609]', panel: 'bg-[#0b0d12]/92', panel2: 'bg-[#10131a]', border: 'border-white/10', border2: 'border-white/15', cyan: 'text-[#59f0ff]', cyanBg: 'bg-[#59f0ff]/10', cyanBorder: 'border-[#59f0ff]/30', muted: 'text-slate-500'
+  bg: 'bg-[#050609]',
+  panel: 'bg-[#0b0d12]/92',
+  border: 'border-white/10',
+  border2: 'border-white/15',
+  cyan: 'text-[#59f0ff]',
+  cyanBg: 'bg-[#59f0ff]/10',
+  cyanBorder: 'border-[#59f0ff]/30',
+  muted: 'text-slate-500'
 }
 
 const threatEvents = [
@@ -34,36 +41,220 @@ function synthWorkflow(input) {
   return `WORKFLOW BLUEPRINT: ${name}\n\n1. INGEST\n- Capture request, source, owner, deadline, required systems, and approval boundary.\n\n2. ROUTE\n- Split into human judgment, assistive drafting, and safe automation steps.\n- Surface blockers before execution.\n\n3. CLASSIFICATION\n- HUMAN: approvals, exceptions, sensitive judgment.\n- ASSIST: drafts, summaries, checklists, routing suggestions.\n- AUTO: logging, reminders, formatting, status updates.\n\n4. GOVERNANCE\n- Read-only first.\n- Operator approval before write-back.\n- Audit trail for every handoff.\n- Blast radius limited by role and system.`
 }
 
-const Header = ({ icon: Icon, title, subtitle }) => <div className="mb-8 flex items-end justify-between gap-6"><div><h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-white">{Icon && <Icon className={ui.cyan} size={26}/>} {title}</h2>{subtitle && <p className={`mt-2 font-mono text-xs uppercase tracking-[0.28em] ${ui.muted}`}>{subtitle}</p>}</div><div className="hidden items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1 font-mono text-[10px] text-green-400 sm:flex"><span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400"/> PUBLIC DEMO</div></div>
-const Card = ({ children, className='' }) => <div className={`rounded-2xl border ${ui.border} ${ui.panel} shadow-2xl shadow-black/30 ${className}`}>{children}</div>
+const Header = ({ icon: Icon, title, subtitle }) => (
+  <div className="mb-8 flex items-end justify-between gap-6">
+    <div>
+      <h2 className="flex items-center gap-3 text-3xl font-semibold tracking-tight text-white">
+        {Icon && <Icon className={ui.cyan} size={26} />} {title}
+      </h2>
+      {subtitle && <p className={`mt-2 font-mono text-xs uppercase tracking-[0.28em] ${ui.muted}`}>{subtitle}</p>}
+    </div>
+    <div className="hidden items-center gap-2 rounded-full border border-green-500/20 bg-green-500/10 px-3 py-1 font-mono text-[10px] text-green-400 sm:flex">
+      <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-400" /> PUBLIC DEMO
+    </div>
+  </div>
+)
 
-function Hero() { return <div className="flex h-full flex-col items-center justify-center text-center"><div className="relative mb-10"><div className="absolute inset-0 rounded-full bg-cyan-400/20 blur-3xl"/><Command className={`relative ${ui.cyan}`} size={70} strokeWidth={1}/></div><h1 className="text-7xl font-semibold tracking-[-0.07em] text-white md:text-8xl">AIMAR</h1><p className={`mt-5 font-mono text-sm uppercase tracking-[0.45em] ${ui.cyan}`}>Command Deck</p><p className="mt-10 max-w-3xl text-xl font-light leading-relaxed text-slate-300">Applied Intelligence Mainframe, Automation, and Research. Operational intelligence infrastructure for workflows, memory, visibility, governance, research, and execution.</p></div> }
+const Card = ({ children, className = '' }) => (
+  <div className={`rounded-2xl border ${ui.border} ${ui.panel} shadow-2xl shadow-black/30 ${className}`}>{children}</div>
+)
 
-function Direction() { const items = ['Workflows','Memory Systems','Operational Visibility','Signal Routing','Governance','Execution Infrastructure']; return <div className="grid h-full items-center gap-10 lg:grid-cols-2"><div><Header title="The Direction"/><p className="text-2xl font-light leading-relaxed text-slate-300">AIMAR started as AI automation work. The stronger pattern became clear: <span className="text-white">building coherent systems around intelligent work.</span></p><div className="mt-8 grid gap-3">{items.map(x => <div key={x} className="flex items-center gap-3 font-mono text-sm text-slate-400"><ChevronRight className={ui.cyan} size={16}/>{x}</div>)}</div></div><Card className="scanline relative overflow-hidden p-8"><div className="absolute inset-0 opacity-[.08]" style={{backgroundImage:'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)',backgroundSize:'32px 32px'}}/><div className="relative z-10 space-y-6"><div className={`rounded-xl border ${ui.border2} bg-black/40 p-5 font-mono text-xs text-slate-400`}>INPUT SIGNAL</div><div className="mx-auto h-8 w-px bg-white/10"/><div className={`rounded-xl border ${ui.cyanBorder} ${ui.cyanBg} p-6 text-center font-mono text-sm uppercase tracking-[0.25em] ${ui.cyan}`}>Coherent Execution Engine</div><div className="grid grid-cols-2 gap-4"><div className={`rounded-xl border ${ui.border2} p-4 text-center font-mono text-xs text-slate-400`}>Automation</div><div className={`rounded-xl border ${ui.border2} p-4 text-center font-mono text-xs text-slate-400`}>Governance</div></div></div></Card></div> }
+function Hero() {
+  return (
+    <div className="flex h-full flex-col items-center justify-center text-center">
+      <div className="relative mb-10">
+        <div className="absolute inset-0 rounded-full bg-cyan-400/20 blur-3xl" />
+        <Command className={`relative ${ui.cyan}`} size={70} strokeWidth={1} />
+      </div>
+      <h1 className="text-7xl font-semibold tracking-[-0.07em] text-white md:text-8xl">AIMAR</h1>
+      <p className={`mt-5 font-mono text-sm uppercase tracking-[0.45em] ${ui.cyan}`}>Command Deck</p>
+      <p className="mt-10 max-w-3xl text-xl font-light leading-relaxed text-slate-300">
+        Applied Intelligence Mainframe, Automation, and Research. Operational intelligence infrastructure for workflows, memory, visibility, governance, research, and execution.
+      </p>
+    </div>
+  )
+}
 
-function Signal() { const steps = ['Ingest','Normalize','Classify','Score','Route','Surface','Decide','Audit']; return <div className="flex h-full flex-col justify-center"><Header icon={Network} title="Operational Intelligence" subtitle="work as signal flow"/><p className="mx-auto mb-12 max-w-3xl text-center text-lg text-slate-300">AIMAR applies the same operating primitive across workflows, operations, security systems, dashboards, research, and signal environments.</p><div className="grid grid-cols-2 gap-3 md:grid-cols-4">{steps.map((s,i)=><Card key={s} className="p-5 text-center transition hover:border-cyan-300/40"><div className={`font-mono text-xs ${ui.muted}`}>{String(i+1).padStart(2,'0')}</div><div className="mt-2 font-semibold text-white">{s}</div></Card>)}</div><div className="mx-auto mt-12 grid w-full max-w-3xl grid-cols-3 gap-4">{[[Database,'Memory'],[GitMerge,'Workflows'],[LayoutGrid,'Dashboards']].map(([Icon,label])=><Card key={label} className="p-5 text-center"><Icon className={`mx-auto mb-3 ${ui.cyan}`} size={22}/><div className="font-mono text-xs text-slate-300">{label}</div></Card>)}</div></div> }
+function Direction() {
+  const items = ['Workflows', 'Memory Systems', 'Operational Visibility', 'Signal Routing', 'Governance', 'Execution Infrastructure']
+  return (
+    <div className="grid h-full items-center gap-10 lg:grid-cols-2">
+      <div>
+        <Header title="The Direction" />
+        <p className="text-2xl font-light leading-relaxed text-slate-300">
+          AIMAR started as AI automation work. The stronger pattern became clear: <span className="text-white">building coherent systems around intelligent work.</span>
+        </p>
+        <div className="mt-8 grid gap-3">
+          {items.map(x => <div key={x} className="flex items-center gap-3 font-mono text-sm text-slate-400"><ChevronRight className={ui.cyan} size={16} />{x}</div>)}
+        </div>
+      </div>
+      <Card className="scanline relative overflow-hidden p-8">
+        <div className="absolute inset-0 opacity-[.08]" style={{ backgroundImage: 'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)', backgroundSize: '32px 32px' }} />
+        <div className="relative z-10 space-y-6">
+          <div className={`rounded-xl border ${ui.border2} bg-black/40 p-5 font-mono text-xs text-slate-400`}>INPUT SIGNAL</div>
+          <div className="mx-auto h-8 w-px bg-white/10" />
+          <div className={`rounded-xl border ${ui.cyanBorder} ${ui.cyanBg} p-6 text-center font-mono text-sm uppercase tracking-[0.25em] ${ui.cyan}`}>Coherent Execution Engine</div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className={`rounded-xl border ${ui.border2} p-4 text-center font-mono text-xs text-slate-400`}>Automation</div>
+            <div className={`rounded-xl border ${ui.border2} p-4 text-center font-mono text-xs text-slate-400`}>Governance</div>
+          </div>
+        </div>
+      </Card>
+    </div>
+  )
+}
 
-function ODSM() { const [picked,setPicked]=useState(null); return <div className="flex h-full flex-col"><Header icon={ShieldAlert} title="ODSM" subtitle="operational threat intelligence"/><div className="grid flex-1 gap-6 lg:grid-cols-3"><Card className="p-6"><h3 className="mb-3 text-lg font-semibold text-white">Core Capabilities</h3><p className="mb-6 text-sm leading-relaxed text-slate-400">AI-assisted threat classification with human-in-the-loop oversight. Real operational systems, not abstract demos.</p>{['Signal Ingestion','Event Analysis','Threat Classification','Operational Visibility'].map(x=><div key={x} className={`mb-3 rounded-xl border ${ui.border2} bg-black/30 p-3 font-mono text-sm text-slate-300`}>{x}</div>)}</Card><Card className="lg:col-span-2 p-6"><div className="mb-5 grid grid-cols-4 gap-3">{[['1,204','TOTAL EVENTS','text-white'],['3','HIGH','text-red-400'],['12','MEDIUM','text-yellow-400'],['1,189','LOW / SAFE','text-green-400']].map(([v,l,c])=><div key={l} className={`rounded-xl border ${ui.border2} bg-black/40 p-4 text-center`}><div className={`text-2xl font-mono ${c}`}>{v}</div><div className={`mt-1 font-mono text-[10px] ${ui.muted}`}>{l}</div></div>)}</div><div className="overflow-x-auto"><table className="w-full text-left font-mono text-xs"><thead className={ui.muted}><tr>{['TIME','IP','TYPE','THREAT','ACTION'].map(h=><th className="pb-3 font-normal" key={h}>{h}</th>)}</tr></thead><tbody>{threatEvents.map((e,i)=><tr key={i} className="border-t border-white/10 text-slate-300"><td className="py-3">{e.time}</td><td>{e.ip}</td><td>{e.type}</td><td>{e.threat}</td><td><button onClick={()=>setPicked(e)} className={`rounded-lg border ${ui.cyanBorder} ${ui.cyanBg} px-3 py-1 ${ui.cyan}`}>ANALYZE</button></td></tr>)}</tbody></table></div>{picked && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/5 p-4 font-mono text-xs leading-relaxed text-slate-300 whitespace-pre-wrap"><button className="float-right text-slate-500" onClick={()=>setPicked(null)}><X size={14}/></button>{tacticalBrief(picked)}</div>}</Card></div></div> }
+function Signal() {
+  const steps = ['Ingest', 'Normalize', 'Classify', 'Score', 'Route', 'Surface', 'Decide', 'Audit']
+  return (
+    <div className="flex h-full flex-col justify-center">
+      <Header icon={Network} title="Operational Intelligence" subtitle="work as signal flow" />
+      <p className="mx-auto mb-12 max-w-3xl text-center text-lg text-slate-300">
+        AIMAR applies the same operating primitive across workflows, operations, security systems, dashboards, research, and signal environments.
+      </p>
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+        {steps.map((s, i) => <Card key={s} className="p-5 text-center transition hover:border-cyan-300/40"><div className={`font-mono text-xs ${ui.muted}`}>{String(i + 1).padStart(2, '0')}</div><div className="mt-2 font-semibold text-white">{s}</div></Card>)}
+      </div>
+      <div className="mx-auto mt-12 grid w-full max-w-3xl grid-cols-3 gap-4">
+        {[[Database, 'Memory'], [GitMerge, 'Workflows'], [LayoutGrid, 'Dashboards']].map(([Icon, label]) => <Card key={label} className="p-5 text-center"><Icon className={`mx-auto mb-3 ${ui.cyan}`} size={22} /><div className="font-mono text-xs text-slate-300">{label}</div></Card>)}
+      </div>
+    </div>
+  )
+}
 
-function Ops() { const [open,setOpen]=useState(false); const [input,setInput]=useState(''); const [draft,setDraft]=useState(''); const run=()=>setDraft(synthWorkflow(input)); return <div className="relative flex h-full flex-col"><Header icon={GitMerge} title="AIMAR Ops" subtitle="workflow intelligence"/><div className="grid flex-1 gap-8 lg:grid-cols-2"><div className="space-y-6"><p className="text-xl font-light leading-relaxed text-slate-300">AIMAR treats workflows as <span className="text-white">operational signal systems.</span></p>{[['Workflow Registry','Centralized mapping of repeatable processes.'],['Classification Engine','Human / Assist / Auto assignment logic.'],['Command Surfaces','Interfaces for operators to execute and monitor.'],['Execution Visibility','Audit trails and performance metrics.']].map(([a,b])=><div key={a} className="border-l border-white/10 pl-4"><div className="font-mono text-sm text-white">{a}</div><div className={`text-xs ${ui.muted}`}>{b}</div></div>)}</div><Card className="p-6"><div className="mb-5 flex items-center justify-between border-b border-white/10 pb-4"><div className="font-mono text-sm text-slate-400">WORKFLOW REGISTRY</div><button onClick={()=>setOpen(true)} className={`rounded-lg border ${ui.cyanBorder} ${ui.cyanBg} px-3 py-1 font-mono text-xs ${ui.cyan}`}>NEW</button></div>{workflows.map(w=><div key={w.name} className={`mb-3 flex items-center justify-between rounded-xl border ${ui.border2} bg-black/30 p-4`}><div><div className="font-semibold text-white">{w.name}</div><div className={`mt-1 font-mono text-[10px] ${ui.muted}`}>{w.type} | {w.runs} RUNS</div></div><div className="rounded-full border border-green-500/25 bg-green-500/10 px-3 py-1 font-mono text-[10px] text-green-400">{w.status}</div></div>)}</Card></div>{open && <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/80 p-6 backdrop-blur"><Card className="w-full max-w-2xl p-6"><div className="mb-4 flex justify-between border-b border-white/10 pb-4"><div className={`font-mono text-sm ${ui.cyan}`}>WORKFLOW SYNTHESIS ENGINE</div><button onClick={()=>setOpen(false)}><X size={18}/></button></div><input value={input} onChange={e=>setInput(e.target.value)} placeholder="e.g. employee offboarding protocol" className={`w-full rounded-xl border ${ui.border2} bg-black/40 p-3 font-mono text-sm text-white outline-none focus:border-cyan-300/40`}/><button onClick={run} className={`mt-3 rounded-xl border ${ui.cyanBorder} ${ui.cyanBg} px-4 py-2 font-mono text-xs ${ui.cyan}`}>GENERATE</button>{draft && <pre className="mt-4 max-h-72 overflow-auto rounded-xl border border-white/10 bg-black/50 p-4 text-xs leading-relaxed text-slate-300 whitespace-pre-wrap">{draft}</pre>}</Card></div>}</div> }
+function ODSM() {
+  const [picked, setPicked] = useState(null)
+  return (
+    <div className="flex h-full flex-col">
+      <Header icon={ShieldAlert} title="ODSM" subtitle="operational threat intelligence" />
+      <div className="grid flex-1 gap-6 lg:grid-cols-3">
+        <Card className="p-6">
+          <h3 className="mb-3 text-lg font-semibold text-white">Core Capabilities</h3>
+          <p className="mb-6 text-sm leading-relaxed text-slate-400">AI-assisted threat classification with human-in-the-loop oversight. Real operational systems, not abstract demos.</p>
+          {['Signal Ingestion', 'Event Analysis', 'Threat Classification', 'Operational Visibility'].map(x => <div key={x} className={`mb-3 rounded-xl border ${ui.border2} bg-black/30 p-3 font-mono text-sm text-slate-300`}>{x}</div>)}
+        </Card>
+        <Card className="p-6 lg:col-span-2">
+          <div className="mb-5 grid grid-cols-4 gap-3">
+            {[["1,204", 'TOTAL EVENTS', 'text-white'], ['3', 'HIGH', 'text-red-400'], ['12', 'MEDIUM', 'text-yellow-400'], ["1,189", 'LOW / SAFE', 'text-green-400']].map(([v, l, c]) => <div key={l} className={`rounded-xl border ${ui.border2} bg-black/40 p-4 text-center`}><div className={`font-mono text-2xl ${c}`}>{v}</div><div className={`mt-1 font-mono text-[10px] ${ui.muted}`}>{l}</div></div>)}
+          </div>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left font-mono text-xs">
+              <thead className={ui.muted}><tr>{['TIME', 'IP', 'TYPE', 'THREAT', 'ACTION'].map(h => <th className="pb-3 font-normal" key={h}>{h}</th>)}</tr></thead>
+              <tbody>{threatEvents.map((e, i) => <tr key={i} className="border-t border-white/10 text-slate-300"><td className="py-3">{e.time}</td><td>{e.ip}</td><td>{e.type}</td><td>{e.threat}</td><td><button onClick={() => setPicked(e)} className={`rounded-lg border ${ui.cyanBorder} ${ui.cyanBg} px-3 py-1 ${ui.cyan}`}>ANALYZE</button></td></tr>)}</tbody>
+            </table>
+          </div>
+          {picked && <div className="mt-5 rounded-xl border border-cyan-300/20 bg-cyan-300/5 p-4 font-mono text-xs leading-relaxed text-slate-300 whitespace-pre-wrap"><button className="float-right text-slate-500" onClick={() => setPicked(null)}><X size={14} /></button>{tacticalBrief(picked)}</div>}
+        </Card>
+      </div>
+    </div>
+  )
+}
 
-function Architecture() { const layers=['Brand + Strategy','Workspace + Config','Memory + Knowledge','Access Layer','Execution Layer','Operator Surfaces','Governance + Evaluation']; return <div className="flex h-full flex-col"><Header icon={Layers} title="Layered Architecture" subtitle="AIMAR mainframe topology"/><div className="grid flex-1 gap-6 lg:grid-cols-[280px_1fr]"><div className="space-y-3"><div className={`font-mono text-xs uppercase tracking-[0.25em] ${ui.muted}`}>Canon</div>{['Godfile','Research Dossier','Configuration Pack'].map(x=><Card key={x} className="p-4"><div className="font-semibold text-white">{x}</div><div className={`text-xs ${ui.muted}`}>source layer</div></Card>)}</div><div className="space-y-3">{layers.map((l,i)=><Card key={l} className="flex items-center gap-4 p-4"><div className={`flex h-9 w-9 items-center justify-center rounded-full border ${ui.border2} font-mono text-xs ${ui.cyan}`}>{i+1}</div><div><div className="font-semibold text-white">{l}</div><div className={`text-xs ${ui.muted}`}>modular operating layer</div></div></Card>)}</div></div></div> }
+function Ops() {
+  const [open, setOpen] = useState(false)
+  const [input, setInput] = useState('')
+  const [draft, setDraft] = useState('')
+  const run = () => setDraft(synthWorkflow(input))
+  return (
+    <div className="relative flex h-full flex-col">
+      <Header icon={GitMerge} title="AIMAR Ops" subtitle="workflow intelligence" />
+      <div className="grid flex-1 gap-8 lg:grid-cols-2">
+        <div className="space-y-6">
+          <p className="text-xl font-light leading-relaxed text-slate-300">AIMAR treats workflows as <span className="text-white">operational signal systems.</span></p>
+          {[["Workflow Registry", 'Centralized mapping of repeatable processes.'], ['Classification Engine', 'Human / Assist / Auto assignment logic.'], ['Command Surfaces', 'Interfaces for operators to execute and monitor.'], ['Execution Visibility', 'Audit trails and performance metrics.']].map(([a, b]) => <div key={a} className="border-l border-white/10 pl-4"><div className="font-mono text-sm text-white">{a}</div><div className={`text-xs ${ui.muted}`}>{b}</div></div>)}
+        </div>
+        <Card className="p-6">
+          <div className="mb-5 flex items-center justify-between border-b border-white/10 pb-4"><div className="font-mono text-sm text-slate-400">WORKFLOW REGISTRY</div><button onClick={() => setOpen(true)} className={`rounded-lg border ${ui.cyanBorder} ${ui.cyanBg} px-3 py-1 font-mono text-xs ${ui.cyan}`}>NEW</button></div>
+          {workflows.map(w => <div key={w.name} className={`mb-3 flex items-center justify-between rounded-xl border ${ui.border2} bg-black/30 p-4`}><div><div className="font-semibold text-white">{w.name}</div><div className={`mt-1 font-mono text-[10px] ${ui.muted}`}>{w.type} | {w.runs} RUNS</div></div><div className="rounded-full border border-green-500/25 bg-green-500/10 px-3 py-1 font-mono text-[10px] text-green-400">{w.status}</div></div>)}
+        </Card>
+      </div>
+      {open && <div className="absolute inset-0 z-30 flex items-center justify-center bg-black/80 p-6 backdrop-blur"><Card className="w-full max-w-2xl p-6"><div className="mb-4 flex justify-between border-b border-white/10 pb-4"><div className={`font-mono text-sm ${ui.cyan}`}>WORKFLOW SYNTHESIS ENGINE</div><button onClick={() => setOpen(false)}><X size={18} /></button></div><input value={input} onChange={e => setInput(e.target.value)} placeholder="e.g. employee offboarding protocol" className={`w-full rounded-xl border ${ui.border2} bg-black/40 p-3 font-mono text-sm text-white outline-none focus:border-cyan-300/40`} /><button onClick={run} className={`mt-3 rounded-xl border ${ui.cyanBorder} ${ui.cyanBg} px-4 py-2 font-mono text-xs ${ui.cyan}`}>GENERATE</button>{draft && <pre className="mt-4 max-h-72 overflow-auto rounded-xl border border-white/10 bg-black/50 p-4 text-xs leading-relaxed text-slate-300 whitespace-pre-wrap">{draft}</pre>}</Card></div>}
+    </div>
+  )
+}
 
-function Governance() { return <div className="grid h-full items-center gap-10 lg:grid-cols-2"><Card className="relative overflow-hidden border-red-500/20 bg-red-950/10 p-8"><Lock className="absolute -right-14 -top-14 h-72 w-72 text-red-500/10"/><div className="relative z-10"><div className="mb-8 flex items-center gap-2 font-mono text-sm uppercase tracking-[0.2em] text-red-300"><AlertTriangle size={16}/> Restricted Access Protocol</div>{[['PERMISSION STAGING','ACTIVE'],['AUDIT TRAILS','IMMUTABLE'],['HUMAN APPROVAL GATES','REQUIRED'],['BLAST RADIUS CONTROL','MODULAR']].map(([a,b])=><div key={a} className="flex justify-between border-b border-red-500/20 py-4 font-mono text-xs"><span>{a}</span><span className="text-green-400">{b}</span></div>)}</div></Card><div><Header title="Security & OPSEC"/><p className="text-xl font-light leading-relaxed text-slate-300">Automation should increase clarity, not invisible risk. AIMAR systems are designed around governance-first automation.</p><Card className="mt-8 p-6"><div className="mb-3 font-semibold text-white">Core OPSEC Principles</div><ul className="space-y-2 text-sm text-slate-400"><li>Source awareness in generated actions.</li><li>Read-only access before write-back authorization.</li><li>Operational logging for accountability.</li><li>Security-aware architecture by default.</li></ul></Card></div></div> }
+function Architecture() {
+  const layers = ['Brand + Strategy', 'Workspace + Config', 'Memory + Knowledge', 'Access Layer', 'Execution Layer', 'Operator Surfaces', 'Governance + Evaluation']
+  return (
+    <div className="flex h-full flex-col">
+      <Header icon={Layers} title="Layered Architecture" subtitle="AIMAR mainframe topology" />
+      <div className="grid flex-1 gap-6 lg:grid-cols-[280px_1fr]">
+        <div className="space-y-3"><div className={`font-mono text-xs uppercase tracking-[0.25em] ${ui.muted}`}>Canon</div>{['Godfile', 'Research Dossier', 'Configuration Pack'].map(x => <Card key={x} className="p-4"><div className="font-semibold text-white">{x}</div><div className={`text-xs ${ui.muted}`}>source layer</div></Card>)}</div>
+        <div className="space-y-3">{layers.map((l, i) => <Card key={l} className="flex items-center gap-4 p-4"><div className={`flex h-9 w-9 items-center justify-center rounded-full border ${ui.border2} font-mono text-xs ${ui.cyan}`}>{i + 1}</div><div><div className="font-semibold text-white">{l}</div><div className={`text-xs ${ui.muted}`}>modular operating layer</div></div></Card>)}</div>
+      </div>
+    </div>
+  )
+}
 
-function Founder() { return <div className="flex h-full flex-col justify-center"><Header icon={Activity} title="Founder OS" subtitle="operator command surface"/><div className="grid gap-4 md:grid-cols-3">{['Priorities','Memory','Workflows','Tasks','Signals','Visibility','Execution Support','Decision Context','Review Loops'].map(x=><Card key={x} className="p-5 text-center font-mono text-sm text-slate-300 hover:border-cyan-300/30">{x}</Card>)}</div><p className="mx-auto mt-10 max-w-2xl text-center text-lg text-slate-400">The objective is reducing fragmentation and context switching while preserving human judgment.</p></div> }
+function Governance() {
+  return (
+    <div className="grid h-full items-center gap-10 lg:grid-cols-2">
+      <Card className="relative overflow-hidden border-red-500/20 bg-red-950/10 p-8"><Lock className="absolute -right-14 -top-14 h-72 w-72 text-red-500/10" /><div className="relative z-10"><div className="mb-8 flex items-center gap-2 font-mono text-sm uppercase tracking-[0.2em] text-red-300"><AlertTriangle size={16} /> Restricted Access Protocol</div>{[['PERMISSION STAGING', 'ACTIVE'], ['AUDIT TRAILS', 'IMMUTABLE'], ['HUMAN APPROVAL GATES', 'REQUIRED'], ['BLAST RADIUS CONTROL', 'MODULAR']].map(([a, b]) => <div key={a} className="flex justify-between border-b border-red-500/20 py-4 font-mono text-xs"><span>{a}</span><span className="text-green-400">{b}</span></div>)}</div></Card>
+      <div><Header title="Security & OPSEC" /><p className="text-xl font-light leading-relaxed text-slate-300">Automation should increase clarity, not invisible risk. AIMAR systems are designed around governance-first automation.</p><Card className="mt-8 p-6"><div className="mb-3 font-semibold text-white">Core OPSEC Principles</div><ul className="space-y-2 text-sm text-slate-400"><li>Source awareness in generated actions.</li><li>Read-only access before write-back authorization.</li><li>Operational logging for accountability.</li><li>Security-aware architecture by default.</li></ul></Card></div>
+    </div>
+  )
+}
 
-function Protects() { const items=['Systems over Hype','Workflow before Tool','Governance before Scale','Operational Clarity','Modular Architecture','OPSEC & Compliance','Proof before Expansion','Human Judgment Central']; return <div className="flex h-full flex-col justify-center"><Header title="What AIMAR Protects"/><p className="mb-10 text-center text-slate-400">Core fundamentals that do not change as AIMAR scales.</p><div className="grid gap-4 md:grid-cols-4">{items.map(x=><Card key={x} className="p-6 text-center font-semibold text-slate-200 hover:border-white/30">{x}</Card>)}</div><div className={`mt-10 text-center font-mono text-xs uppercase tracking-[0.25em] ${ui.cyan}`}>Path: Services -> Products -> Infrastructure</div></div> }
+function Founder() {
+  return <div className="flex h-full flex-col justify-center"><Header icon={Activity} title="Founder OS" subtitle="operator command surface" /><div className="grid gap-4 md:grid-cols-3">{['Priorities', 'Memory', 'Workflows', 'Tasks', 'Signals', 'Visibility', 'Execution Support', 'Decision Context', 'Review Loops'].map(x => <Card key={x} className="p-5 text-center font-mono text-sm text-slate-300 hover:border-cyan-300/30">{x}</Card>)}</div><p className="mx-auto mt-10 max-w-2xl text-center text-lg text-slate-400">The objective is reducing fragmentation and context switching while preserving human judgment.</p></div>
+}
 
-function Final() { return <div className="flex h-full flex-col items-center justify-center text-center"><Command size={44} className="mb-8 text-slate-700" strokeWidth={1}/><h2 className="max-w-3xl text-5xl font-semibold tracking-tight text-white">AIMAR builds operational <span className={ui.cyan}>intelligence infrastructure.</span></h2><div className="mt-10 grid gap-x-8 gap-y-4 text-left font-mono text-sm text-slate-400 md:grid-cols-3">{['Memory Systems','Workflow Engines','Dashboards','Research Artifacts','Governed Automations','Execution Systems'].map(x=><div key={x} className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-cyan-300"/>{x}</div>)}</div><p className="mt-12 border-t border-white/10 pt-8 text-xl text-slate-300">For people and teams that need cleaner execution.</p></div> }
+function Protects() {
+  const items = ['Systems over Hype', 'Workflow before Tool', 'Governance before Scale', 'Operational Clarity', 'Modular Architecture', 'OPSEC & Compliance', 'Proof before Expansion', 'Human Judgment Central']
+  return (
+    <div className="flex h-full flex-col justify-center">
+      <Header title="What AIMAR Protects" />
+      <p className="mb-10 text-center text-slate-400">Core fundamentals that do not change as AIMAR scales.</p>
+      <div className="grid gap-4 md:grid-cols-4">{items.map(x => <Card key={x} className="p-6 text-center font-semibold text-slate-200 hover:border-white/30">{x}</Card>)}</div>
+      <div className={`mt-10 text-center font-mono text-xs uppercase tracking-[0.25em] ${ui.cyan}`}>{'Path: Services -> Products -> Infrastructure'}</div>
+    </div>
+  )
+}
 
-const slideList = [ ['init','Initialization',Hero], ['direction','The Direction',Direction], ['signal','Operational Intelligence',Signal], ['odsm','ODSM',ODSM], ['ops','AIMAR Ops',Ops], ['topology','Topology',Architecture], ['opsec','Security & OPSEC',Governance], ['founder','Founder OS',Founder], ['protect','Core Tenets',Protects], ['final','Positioning',Final] ]
+function Final() {
+  return <div className="flex h-full flex-col items-center justify-center text-center"><Command size={44} className="mb-8 text-slate-700" strokeWidth={1} /><h2 className="max-w-3xl text-5xl font-semibold tracking-tight text-white">AIMAR builds operational <span className={ui.cyan}>intelligence infrastructure.</span></h2><div className="mt-10 grid gap-x-8 gap-y-4 text-left font-mono text-sm text-slate-400 md:grid-cols-3">{['Memory Systems', 'Workflow Engines', 'Dashboards', 'Research Artifacts', 'Governed Automations', 'Execution Systems'].map(x => <div key={x} className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />{x}</div>)}</div><p className="mt-12 border-t border-white/10 pt-8 text-xl text-slate-300">For people and teams that need cleaner execution.</p></div>
+}
+
+const slideList = [
+  ['init', 'Initialization', Hero],
+  ['direction', 'The Direction', Direction],
+  ['signal', 'Operational Intelligence', Signal],
+  ['odsm', 'ODSM', ODSM],
+  ['ops', 'AIMAR Ops', Ops],
+  ['topology', 'Topology', Architecture],
+  ['opsec', 'Security & OPSEC', Governance],
+  ['founder', 'Founder OS', Founder],
+  ['protect', 'Core Tenets', Protects],
+  ['final', 'Positioning', Final]
+]
 
 export default function App() {
-  const [current,setCurrent]=useState(0)
-  const next=useCallback(()=>setCurrent(x=>Math.min(x+1,slideList.length-1)),[])
-  const prev=useCallback(()=>setCurrent(x=>Math.max(x-1,0)),[])
-  useEffect(()=>{const h=e=>{if(e.key==='ArrowRight'||e.key===' ')next(); if(e.key==='ArrowLeft')prev()}; window.addEventListener('keydown',h); return()=>window.removeEventListener('keydown',h)},[next,prev])
-  const Active=useMemo(()=>slideList[current][2],[current])
-  return <div className={`min-h-screen ${ui.bg} text-slate-200`}><div className="fixed inset-0 opacity-[.05]" style={{backgroundImage:'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)',backgroundSize:'42px 42px'}}/><header className={`relative z-20 flex h-14 items-center justify-between border-b ${ui.border} ${ui.panel} px-4 md:px-6`}><div className="flex items-center gap-3"><Command className={ui.cyan} size={18}/><span className="font-semibold text-white">AIMAR OS</span><span className={`hidden font-mono text-xs uppercase tracking-[0.25em] ${ui.muted} md:inline`}>Command Deck</span></div><div className="flex items-center gap-3 font-mono text-xs"><span className="hidden text-slate-500 sm:inline">SECURE CONNECTION</span><span className="rounded-full border border-green-500/25 bg-green-500/10 px-3 py-1 text-green-400">ACTIVE</span></div></header><div className="relative z-10 flex h-[calc(100vh-3.5rem)]"><aside className={`hidden w-64 shrink-0 border-r ${ui.border} ${ui.panel} p-4 lg:block`}><div className={`mb-4 px-2 font-mono text-[10px] uppercase tracking-[0.25em] ${ui.muted}`}>Index</div>{slideList.map(([id,name],i)=><button key={id} onClick={()=>setCurrent(i)} className={`mb-1 flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition ${current===i?'bg-white/8 text-white':'text-slate-500 hover:bg-white/5 hover:text-slate-300'}`}><span>{name}</span>{current===i&&<ChevronRight className={ui.cyan} size={14}/>}</button>)}<div className="mt-8 border-t border-white/10 pt-5 font-mono text-xs text-slate-500"><div className="mb-2 flex justify-between"><span>System Load</span><span className="text-white">14%</span></div><div className="flex justify-between"><span>Workflows</span><span className={ui.cyan}>12</span></div></div></aside><main className="flex flex-1 flex-col overflow-hidden"><section className="no-scrollbar flex-1 overflow-auto p-6 md:p-10 lg:p-14"><div className="mx-auto h-full min-h-[620px] max-w-6xl animate-fade-in"><Active/></div></section><footer className={`flex h-16 items-center justify-between border-t ${ui.border} ${ui.panel} px-6`}><div className={`font-mono text-xs ${ui.muted}`}>{String(current+1).padStart(2,'0')} / {String(slideList.length).padStart(2,'0')}</div><div className="flex gap-3"><button onClick={prev} disabled={current===0} className={`rounded-xl border ${ui.border2} p-2 text-slate-400 disabled:opacity-25`}><ChevronLeft size={18}/></button><button onClick={next} disabled={current===slideList.length-1} className={`rounded-xl border ${ui.cyanBorder} ${ui.cyanBg} p-2 ${ui.cyan} disabled:opacity-25`}><ChevronRight size={18}/></button></div></footer></main></div></div>
+  const [current, setCurrent] = useState(0)
+  const next = useCallback(() => setCurrent(x => Math.min(x + 1, slideList.length - 1)), [])
+  const prev = useCallback(() => setCurrent(x => Math.max(x - 1, 0)), [])
+
+  useEffect(() => {
+    const h = e => { if (e.key === 'ArrowRight' || e.key === ' ') next(); if (e.key === 'ArrowLeft') prev() }
+    window.addEventListener('keydown', h)
+    return () => window.removeEventListener('keydown', h)
+  }, [next, prev])
+
+  const Active = useMemo(() => slideList[current][2], [current])
+
+  return (
+    <div className={`min-h-screen ${ui.bg} text-slate-200`}>
+      <div className="fixed inset-0 opacity-[.05]" style={{ backgroundImage: 'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)', backgroundSize: '42px 42px' }} />
+      <header className={`relative z-20 flex h-14 items-center justify-between border-b ${ui.border} ${ui.panel} px-4 md:px-6`}>
+        <div className="flex items-center gap-3"><Command className={ui.cyan} size={18} /><span className="font-semibold text-white">AIMAR OS</span><span className={`hidden font-mono text-xs uppercase tracking-[0.25em] ${ui.muted} md:inline`}>Command Deck</span></div>
+        <div className="flex items-center gap-3 font-mono text-xs"><span className="hidden text-slate-500 sm:inline">SECURE CONNECTION</span><span className="rounded-full border border-green-500/25 bg-green-500/10 px-3 py-1 text-green-400">ACTIVE</span></div>
+      </header>
+      <div className="relative z-10 flex h-[calc(100vh-3.5rem)]">
+        <aside className={`hidden w-64 shrink-0 border-r ${ui.border} ${ui.panel} p-4 lg:block`}><div className={`mb-4 px-2 font-mono text-[10px] uppercase tracking-[0.25em] ${ui.muted}`}>Index</div>{slideList.map(([id, name], i) => <button key={id} onClick={() => setCurrent(i)} className={`mb-1 flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-sm transition ${current === i ? 'bg-white/10 text-white' : 'text-slate-500 hover:bg-white/5 hover:text-slate-300'}`}><span>{name}</span>{current === i && <ChevronRight className={ui.cyan} size={14} />}</button>)}<div className="mt-8 border-t border-white/10 pt-5 font-mono text-xs text-slate-500"><div className="mb-2 flex justify-between"><span>System Load</span><span className="text-white">14%</span></div><div className="flex justify-between"><span>Workflows</span><span className={ui.cyan}>12</span></div></div></aside>
+        <main className="flex flex-1 flex-col overflow-hidden">
+          <section className="no-scrollbar flex-1 overflow-auto p-6 md:p-10 lg:p-14"><div className="mx-auto h-full min-h-[620px] max-w-6xl animate-fade-in"><Active /></div></section>
+          <footer className={`flex h-16 items-center justify-between border-t ${ui.border} ${ui.panel} px-6`}><div className={`font-mono text-xs ${ui.muted}`}>{String(current + 1).padStart(2, '0')} / {String(slideList.length).padStart(2, '0')}</div><div className="flex gap-3"><button onClick={prev} disabled={current === 0} className={`rounded-xl border ${ui.border2} p-2 text-slate-400 disabled:opacity-25`}><ChevronLeft size={18} /></button><button onClick={next} disabled={current === slideList.length - 1} className={`rounded-xl border ${ui.cyanBorder} ${ui.cyanBg} p-2 ${ui.cyan} disabled:opacity-25`}><ChevronRight size={18} /></button></div></footer>
+        </main>
+      </div>
+    </div>
+  )
 }
