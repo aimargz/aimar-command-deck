@@ -1,35 +1,20 @@
-function logoSvg(size='hero'){
-  const showFlows=size==='hero';
-  return `<svg class="aimar-animated-mark" viewBox="0 0 256 256" aria-label="Aimar animated logo" role="img">
-    <defs>
-      <radialGradient id="shellFill" cx="50%" cy="42%" r="58%"><stop offset="0%" stop-color="#9ff6ff" stop-opacity=".20"/><stop offset="48%" stop-color="#245cff" stop-opacity=".08"/><stop offset="100%" stop-color="#02040a" stop-opacity=".02"/></radialGradient>
-      <radialGradient id="coreFill" cx="45%" cy="34%" r="60%"><stop offset="0%" stop-color="#fff" stop-opacity=".92"/><stop offset="30%" stop-color="#77f7ff" stop-opacity=".74"/><stop offset="100%" stop-color="#0b367a" stop-opacity=".52"/></radialGradient>
-      <linearGradient id="markGrad" x1="0" x2="1" y1="0" y2="1"><stop offset="0%" stop-color="#f8fcff"/><stop offset="45%" stop-color="#77f7ff"/><stop offset="100%" stop-color="#236dff"/></linearGradient>
-      <linearGradient id="axisGrad" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#fff"/><stop offset="50%" stop-color="#77f7ff"/><stop offset="100%" stop-color="#1f6bff"/></linearGradient>
-      <filter id="softGlow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="2.8" result="blur"/><feColorMatrix in="blur" type="matrix" values="0 0 0 0 .25 0 0 0 0 .78 0 0 0 0 1 0 0 0 .78 0" result="glow"/><feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    </defs>
-    <circle class="aimar-logo-shell" cx="128" cy="128" r="94"/>
-    <circle class="aimar-logo-ring" cx="128" cy="128" r="103"/>
-    <circle class="aimar-logo-ring r2" cx="128" cy="128" r="74"/>
-    <ellipse class="aimar-logo-ring r3" cx="128" cy="151" rx="62" ry="17"/>
-    ${showFlows?'<path class="aimar-logo-flow" d="M66 166 C94 146 109 149 128 151 C147 149 162 146 190 166"/><path class="aimar-logo-flow" d="M72 130 C98 119 111 129 128 151 C145 129 158 119 184 130"/>':''}
-    <path class="aimar-logo-mark" d="M74 186 L128 70 L182 186"/>
-    <path class="aimar-logo-mark-inner" d="M96 170 L128 101 L160 170"/>
-    <line class="aimar-logo-axis" x1="128" y1="34" x2="128" y2="220"/>
-    <circle class="aimar-logo-core" cx="128" cy="151" r="18"/>
-    <circle class="aimar-logo-node n1" cx="128" cy="45" r="3.6"/>
-    <circle class="aimar-logo-node n2" cx="128" cy="151" r="4.4"/>
-    <circle class="aimar-logo-node n3" cx="128" cy="211" r="3"/>
-  </svg>`;
+function createNeuralLogo(){
+  const wrap=document.createElement('div');
+  wrap.className='aimar-neural-logo';
+  wrap.innerHTML='<canvas aria-hidden="true"></canvas><span class="aimar-neural-axis"></span><span class="aimar-neural-core"></span><span class="aimar-neural-word">neural systems</span>';
+  const canvas=wrap.querySelector('canvas');
+  const ctx=canvas.getContext('2d');
+  const state={mx:0,my:0,hover:false,t:0,nodes:[]};
+  const seed=[
+    [0,-.62],[.18,-.34],[-.18,-.34],[.36,.08],[-.36,.08],[.18,.38],[-.18,.38],[0,.02],[.48,.34],[-.48,.34],[.31,-.08],[-.31,-.08],[0,.56]
+  ];
+  function resize(){const r=wrap.getBoundingClientRect();const d=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.max(1,Math.floor(r.width*d));canvas.height=Math.max(1,Math.floor(r.height*d));canvas.style.width=r.width+'px';canvas.style.height=r.height+'px';ctx.setTransform(d,0,0,d,0,0)}
+  function init(){state.nodes=seed.map((p,i)=>({x:p[0],y:p[1],r:1.4+(i%3)*.45,phase:i*.72}))}
+  function draw(){const w=canvas.clientWidth,h=canvas.clientHeight,cx=w/2,cy=h/2,rad=Math.min(w,h)*.42;state.t+=.012;ctx.clearRect(0,0,w,h);ctx.save();ctx.translate(cx,cy);ctx.rotate(state.t*.035);ctx.strokeStyle='rgba(125,239,255,.20)';ctx.lineWidth=1;for(let r of [.45,.66,.86]){ctx.beginPath();ctx.arc(0,0,rad*r,0,Math.PI*2);ctx.stroke()}ctx.restore();const pts=state.nodes.map(n=>{const drift=Math.sin(state.t+n.phase)*.018;const pull=state.hover?.035:0;return{x:cx+(n.x+drift+state.mx*pull)*rad,y:cy+(n.y+Math.cos(state.t+n.phase)*.014+state.my*pull)*rad,r:n.r}});ctx.lineWidth=.75;for(let i=0;i<pts.length;i++){for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j];const dist=Math.hypot(a.x-b.x,a.y-b.y);if(dist<rad*.62){const alpha=(1-dist/(rad*.62))*(state.hover?.48:.28);ctx.strokeStyle=`rgba(125,239,255,${alpha})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke()}}}ctx.strokeStyle=state.hover?'rgba(245,251,255,.82)':'rgba(245,251,255,.58)';ctx.lineWidth=1.3;ctx.beginPath();ctx.moveTo(cx-rad*.30,cy+rad*.34);ctx.lineTo(cx,cy-rad*.43);ctx.lineTo(cx+rad*.30,cy+rad*.34);ctx.stroke();ctx.strokeStyle='rgba(125,239,255,.30)';ctx.lineWidth=.9;ctx.beginPath();ctx.moveTo(cx-rad*.16,cy+rad*.16);ctx.lineTo(cx,cy-rad*.18);ctx.lineTo(cx+rad*.16,cy+rad*.16);ctx.stroke();for(const p of pts){const pulse=.65+Math.sin(state.t*2+p.r)*.35;ctx.fillStyle=`rgba(180,248,255,${.42+pulse*.42})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r*(state.hover?1.25:1),0,Math.PI*2);ctx.fill();ctx.shadowColor='rgba(125,239,255,.8)';ctx.shadowBlur=8;ctx.fill();ctx.shadowBlur=0}requestAnimationFrame(draw)}
+  wrap.addEventListener('pointermove',e=>{const r=wrap.getBoundingClientRect();state.mx=((e.clientX-r.left)/r.width-.5)*2;state.my=((e.clientY-r.top)/r.height-.5)*2;state.hover=true});
+  wrap.addEventListener('pointerleave',()=>{state.mx=0;state.my=0;state.hover=false});
+  resize();init();requestAnimationFrame(draw);new ResizeObserver(resize).observe(wrap);return wrap;
 }
-function injectAimarLogo(){
-  const hero=document.querySelector('.aurora-orb');
-  if(hero && !hero.querySelector('.aimar-animated-mark')) hero.insertAdjacentHTML('beforeend',logoSvg('hero'));
-  const header=document.querySelector('header .flex.min-w-0.items-center.gap-3');
-  if(header && !header.querySelector('.aimar-header-mark')){
-    const old=header.querySelector('svg'); if(old) old.style.display='none';
-    const wrap=document.createElement('span'); wrap.className='aimar-header-mark'; wrap.innerHTML=logoSvg('header'); header.prepend(wrap);
-  }
-}
-function boot(){injectAimarLogo(); new MutationObserver(injectAimarLogo).observe(document.body,{childList:true,subtree:true});}
-if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true}); else boot();
+function injectAimarLogo(){const hero=document.querySelector('.aurora-orb');if(hero&&!hero.querySelector('.aimar-neural-logo')){hero.appendChild(createNeuralLogo())}const header=document.querySelector('header .flex.min-w-0.items-center.gap-3');if(header&&!header.querySelector('.aimar-header-mark')){const old=header.querySelector('svg');if(old)old.style.display='none';const mark=document.createElement('span');mark.className='aimar-header-mark';header.prepend(mark)}}
+function boot(){injectAimarLogo();new MutationObserver(injectAimarLogo).observe(document.body,{childList:true,subtree:true})}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
