@@ -21,6 +21,9 @@ button, input, textarea { font: inherit; }
 @keyframes terminalBlink { 0%, 45% { opacity: 1; } 46%, 100% { opacity: 0; } }
 @keyframes orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 @keyframes tickerPulse { 0%,100% { opacity:.62; } 50% { opacity:1; } }
+@keyframes v2Rail { from { transform: translateX(-22%); } to { transform: translateX(22%); } }
+@keyframes v2Noise { 0% { transform: translate3d(0,0,0); } 25% { transform: translate3d(-1%,1%,0); } 50% { transform: translate3d(1%,-1%,0); } 75% { transform: translate3d(1%,1%,0); } 100% { transform: translate3d(0,0,0); } }
+@keyframes v2Breathe { 0%,100% { opacity:.58; filter: blur(24px); } 50% { opacity:1; filter: blur(18px); } }
 
 .animate-fade-in { animation: fadeIn .35s ease-out both; }
 .glow-pulse { animation: glowPulse 2.4s ease-in-out infinite; }
@@ -106,6 +109,148 @@ button, input, textarea { font: inherit; }
 }
 
 .ticker-dot { animation: tickerPulse 1.8s ease-in-out infinite; }
+
+/* AIMAR Command Deck V2 safe visual pass. CSS-only: no JSX risk. */
+body {
+  background:
+    radial-gradient(circle at 16% 10%, rgba(119,247,255,.08), transparent 26%),
+    radial-gradient(circle at 82% 18%, rgba(139,92,246,.075), transparent 28%),
+    radial-gradient(circle at 48% 92%, rgba(34,197,94,.045), transparent 34%),
+    #030408;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    linear-gradient(rgba(255,255,255,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
+    repeating-linear-gradient(to bottom, rgba(255,255,255,.028) 0 1px, transparent 1px 5px);
+  background-size: 42px 42px, 42px 42px, auto;
+  mask-image: radial-gradient(circle at 50% 42%, black, transparent 75%);
+  opacity: .82;
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: -8%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: .16;
+  mix-blend-mode: screen;
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(255,255,255,.9) 0 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(119,247,255,.85) 0 1px, transparent 1px);
+  background-size: 7px 7px, 11px 11px;
+  animation: v2Noise 10s steps(5) infinite;
+}
+
+header, aside, footer {
+  backdrop-filter: blur(22px) saturate(145%);
+  -webkit-backdrop-filter: blur(22px) saturate(145%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.045);
+}
+
+main section > div:first-child > div.flex.h-full.flex-col.items-center.justify-center.text-center {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 2rem;
+  padding: 3rem 2rem;
+  background:
+    radial-gradient(circle at 50% 32%, rgba(119,247,255,.16), transparent 32%),
+    radial-gradient(circle at 82% 14%, rgba(139,92,246,.13), transparent 28%),
+    linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.015));
+  box-shadow:
+    inset 0 0 88px rgba(119,247,255,.04),
+    0 32px 120px rgba(0,0,0,.42),
+    0 0 70px rgba(119,247,255,.06);
+}
+main section > div:first-child > div.flex.h-full.flex-col.items-center.justify-center.text-center::before {
+  content: 'PUBLIC COMMAND SURFACE INITIALIZED';
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 999px;
+  background: rgba(0,0,0,.36);
+  padding: .55rem .9rem;
+  color: rgba(226,232,240,.68);
+  font: 10px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: .22em;
+  white-space: nowrap;
+  backdrop-filter: blur(16px);
+}
+main section > div:first-child > div.flex.h-full.flex-col.items-center.justify-center.text-center::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px),
+    linear-gradient(100deg, transparent 0 42%, rgba(119,247,255,.12) 50%, transparent 58%);
+  background-size: 34px 34px, 34px 34px, 220% 100%;
+  opacity: .22;
+  animation: v2Rail 7s ease-in-out infinite alternate;
+}
+
+main section h1 {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 0 38px rgba(255,255,255,.22), 0 0 78px rgba(119,247,255,.18);
+}
+main section h1 + p::after {
+  content: ' V2';
+  color: #77f7ff;
+}
+main section h1 + p + p {
+  position: relative;
+  z-index: 2;
+  max-width: 58rem !important;
+  font-size: clamp(1.1rem, 2vw, 1.65rem) !important;
+}
+main section h1 + p + p::after {
+  content: '';
+  display: block;
+  width: min(620px, 86vw);
+  height: 1px;
+  margin: 2rem auto 0;
+  background: linear-gradient(90deg, transparent, rgba(119,247,255,.55), transparent);
+}
+
+.aurora-orb {
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 128px;
+  height: 128px;
+  border: 1px solid rgba(255,255,255,.18);
+  background:
+    radial-gradient(circle at 34% 28%, rgba(255,255,255,.32), transparent 18%),
+    radial-gradient(circle at 70% 74%, rgba(119,247,255,.24), transparent 24%),
+    linear-gradient(135deg, rgba(255,255,255,.09), rgba(119,247,255,.04));
+  box-shadow: inset 0 1px 30px rgba(255,255,255,.08), 0 0 96px rgba(119,247,255,.24);
+  backdrop-filter: blur(18px);
+}
+.aurora-orb::before { inset: -30px; border-color: rgba(119,247,255,.22); }
+.aurora-orb::after { inset: -58px; border-color: rgba(255,255,255,.11); }
+.aurora-orb > div { animation: v2Breathe 4s ease-in-out infinite; }
+
+.motion-card, .rounded-2xl, .rounded-xl {
+  backdrop-filter: blur(18px) saturate(132%);
+  -webkit-backdrop-filter: blur(18px) saturate(132%);
+}
+.motion-card {
+  background-image: linear-gradient(135deg, rgba(255,255,255,.075), rgba(255,255,255,.018) 50%, rgba(119,247,255,.035));
+}
+.motion-card:hover {
+  border-color: rgba(119,247,255,.34) !important;
+  box-shadow: 0 24px 80px rgba(0,0,0,.5), 0 0 44px rgba(119,247,255,.08);
+}
 
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
