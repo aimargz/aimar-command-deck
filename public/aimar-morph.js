@@ -22,6 +22,15 @@ function canClick(button) {
   return button && !button.disabled && button.getAttribute('aria-disabled') !== 'true';
 }
 
+function ensureToolsLink() {
+  if (document.querySelector('.aimar-tools-link')) return;
+  const link = document.createElement('a');
+  link.href = '/nested-tools.html';
+  link.className = 'aimar-tools-link';
+  link.textContent = 'Nested Tools';
+  document.body.appendChild(link);
+}
+
 function route(direction) {
   if (locked) return;
   if (isTypingTarget(document.activeElement)) return;
@@ -50,12 +59,10 @@ function route(direction) {
 function onWheel(event) {
   const paletteOpen = document.querySelector('.fixed.inset-0.z-50');
   if (paletteOpen || isTypingTarget(event.target)) return;
-
   const absX = Math.abs(event.deltaX);
   const absY = Math.abs(event.deltaY);
   const primary = absY >= absX ? event.deltaY : event.deltaX;
   if (Math.abs(primary) < WHEEL_THRESHOLD) return;
-
   event.preventDefault();
   route(primary > 0 ? 1 : -1);
 }
@@ -75,7 +82,6 @@ function onTouchEnd(event) {
   const dy = touch.clientY - touchStartY;
   const elapsed = Date.now() - touchStartTime;
   if (elapsed > 900) return;
-
   const primary = Math.abs(dx) > Math.abs(dy) ? dx : -dy;
   if (Math.abs(primary) < SWIPE_THRESHOLD) return;
   route(primary < 0 ? 1 : -1);
@@ -83,6 +89,7 @@ function onTouchEnd(event) {
 
 function boot() {
   document.body.classList.add('aimar-morph-ready');
+  ensureToolsLink();
   window.addEventListener('wheel', onWheel, { passive: false });
   window.addEventListener('touchstart', onTouchStart, { passive: true });
   window.addEventListener('touchend', onTouchEnd, { passive: true });
