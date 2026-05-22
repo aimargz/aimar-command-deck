@@ -1,6 +1,6 @@
 :root {
-  --aimar-morph-ms: 520ms;
-  --aimar-morph-ease: cubic-bezier(.16, 1, .3, 1);
+  --aimar-morph-ms: 420ms;
+  --aimar-morph-ease: cubic-bezier(.2, .85, .25, 1);
 }
 
 body.aimar-morph-ready main section {
@@ -9,7 +9,8 @@ body.aimar-morph-ready main section {
 
 body.aimar-morph-ready main section > div:first-child {
   transform-origin: center center;
-  will-change: transform, opacity, filter, clip-path;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 body.aimar-morph-ready main section::before {
@@ -20,15 +21,15 @@ body.aimar-morph-ready main section::before {
   pointer-events: none;
   opacity: 0;
   background:
-    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(119,247,255,.20), transparent 34%),
-    linear-gradient(110deg, transparent 0 42%, rgba(119,247,255,.18) 50%, transparent 58%);
+    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(119,247,255,.12), transparent 36%),
+    linear-gradient(110deg, transparent 0 44%, rgba(119,247,255,.10) 50%, transparent 56%);
   mix-blend-mode: screen;
   transition: opacity var(--aimar-morph-ms) var(--aimar-morph-ease);
 }
 
 body.aimar-morph-forward main section::before,
 body.aimar-morph-back main section::before {
-  opacity: 1;
+  opacity: .72;
 }
 
 body.aimar-morph-forward main section > div:first-child {
@@ -40,26 +41,26 @@ body.aimar-morph-back main section > div:first-child {
 }
 
 body.aimar-morph-settle main section > div:first-child {
-  animation: aimarMorphSettle 620ms var(--aimar-morph-ease) both;
+  animation: aimarMorphSettle 360ms var(--aimar-morph-ease) both;
 }
 
 @keyframes aimarMorphForward {
-  0% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); clip-path: inset(0 0 0 0 round 24px); }
-  44% { opacity: .18; transform: translateX(-34px) scale(.965); filter: blur(12px) saturate(1.45); clip-path: inset(6% 14% 6% 0 round 34px); }
-  55% { opacity: .08; transform: translateX(34px) scale(.955); filter: blur(18px) saturate(1.6); clip-path: inset(9% 0 9% 18% round 40px); }
-  100% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); clip-path: inset(0 0 0 0 round 24px); }
+  0% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
+  46% { opacity: .58; transform: translate3d(-22px,0,0) scale(.985); }
+  54% { opacity: .42; transform: translate3d(20px,0,0) scale(.982); }
+  100% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
 }
 
 @keyframes aimarMorphBack {
-  0% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); clip-path: inset(0 0 0 0 round 24px); }
-  44% { opacity: .18; transform: translateX(34px) scale(.965); filter: blur(12px) saturate(1.45); clip-path: inset(6% 0 6% 14% round 34px); }
-  55% { opacity: .08; transform: translateX(-34px) scale(.955); filter: blur(18px) saturate(1.6); clip-path: inset(9% 18% 9% 0 round 40px); }
-  100% { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); clip-path: inset(0 0 0 0 round 24px); }
+  0% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
+  46% { opacity: .58; transform: translate3d(22px,0,0) scale(.985); }
+  54% { opacity: .42; transform: translate3d(-20px,0,0) scale(.982); }
+  100% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
 }
 
 @keyframes aimarMorphSettle {
-  0% { opacity: .18; transform: scale(.972) translateY(10px); filter: blur(12px) saturate(1.35); }
-  100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0) saturate(1); }
+  0% { opacity: .72; transform: translate3d(0,6px,0) scale(.992); }
+  100% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
 }
 
 body.aimar-morph-ready footer::before {
@@ -75,14 +76,14 @@ body.aimar-morph-ready footer::before {
 @media (max-width: 760px) {
   body.aimar-morph-ready footer::before { display: none; }
   @keyframes aimarMorphForward {
-    0% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-    48% { opacity: .12; transform: translateY(-26px) scale(.96); filter: blur(12px); }
-    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    0% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
+    48% { opacity: .48; transform: translate3d(0,-16px,0) scale(.988); }
+    100% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
   }
   @keyframes aimarMorphBack {
-    0% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
-    48% { opacity: .12; transform: translateY(26px) scale(.96); filter: blur(12px); }
-    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    0% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
+    48% { opacity: .48; transform: translate3d(0,16px,0) scale(.988); }
+    100% { opacity: 1; transform: translate3d(0,0,0) scale(1); }
   }
 }
 

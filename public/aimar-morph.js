@@ -1,9 +1,13 @@
-const AIMAR_MORPH_MS = 520;
-const AIMAR_LOCK_MS = 760;
-const WHEEL_THRESHOLD = 48;
-const SWIPE_THRESHOLD = 46;
+const AIMAR_MORPH_MS = 420;
+const AIMAR_LOCK_MS = 980;
+const WHEEL_THRESHOLD = 145;
+const WHEEL_RESET_MS = 180;
+const SWIPE_THRESHOLD = 58;
 
 let locked = false;
+let wheelTotal = 0;
+let lastWheelAt = 0;
+let lastRouteAt = 0;
 let touchStartX = 0;
 let touchStartY = 0;
 let touchStartTime = 0;
@@ -11,6 +15,25 @@ let touchStartTime = 0;
 function isTypingTarget(target) {
   const tag = target?.tagName?.toLowerCase();
   return tag === 'input' || tag === 'textarea' || target?.isContentEditable;
+}
+
+function isScrollableTarget(target) {
+  let node = target;
+  while (node && node !== document.body && node !== document.documentElement) {
+    const style = window.getComputedStyle(node);
+    const canScrollY = /(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 4;
+    const canScrollX = /(auto|scroll)/.test(style.overflowX) && node.scrollWidth > node.clientWidth + 4;
+    if (canScrollY || canScrollX) return true;
+    node = node.parentElement;
+  }
+  return false;
+}
+
+function normalizeWheel(event) {
+  const multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
+  const dx = event.deltaX * multiplier;
+  const dy = event.deltaY * multiplier;
+  return Math.abs(dy) >= Math.abs(dx) ? dy : dx;
 }
 
 function getFooterButtons() {
@@ -39,20 +62,28 @@ function ensureToolLinks() {
 }
 
 function route(direction) {
-  if (locked) return;
+  const now = performance.now();
+  if (locked || now - lastRouteAt < AIMAR_LOCK_MS) return;
   if (isTypingTarget(document.activeElement)) return;
+
   const { prev, next } = getFooterButtons();
   const button = direction > 0 ? next : prev;
   if (!canClick(button)) return;
+
   locked = true;
+  lastRouteAt = now;
+  wheelTotal = 0;
+
   const body = document.body;
   body.classList.remove('aimar-morph-forward', 'aimar-morph-back', 'aimar-morph-settle');
   body.classList.add(direction > 0 ? 'aimar-morph-forward' : 'aimar-morph-back');
+
   window.setTimeout(() => {
     button.click();
     body.classList.remove('aimar-morph-forward', 'aimar-morph-back');
     body.classList.add('aimar-morph-settle');
-  }, Math.floor(AIMAR_MORPH_MS * 0.48));
+  }, Math.floor(AIMAR_MORPH_MS * 0.52));
+
   window.setTimeout(() => {
     body.classList.remove('aimar-morph-settle');
     locked = false;
@@ -61,13 +92,24 @@ function route(direction) {
 
 function onWheel(event) {
   const paletteOpen = document.querySelector('.fixed.inset-0.z-50');
-  if (paletteOpen || isTypingTarget(event.target)) return;
-  const absX = Math.abs(event.deltaX);
-  const absY = Math.abs(event.deltaY);
-  const primary = absY >= absX ? event.deltaY : event.deltaX;
-  if (Math.abs(primary) < WHEEL_THRESHOLD) return;
+  if (paletteOpen || event.ctrlKey || isTypingTarget(event.target) || isScrollableTarget(event.target)) return;
+
+  const now = performance.now();
+  const primary = normalizeWheel(event);
+  if (!primary) return;
+
   event.preventDefault();
-  route(primary > 0 ? 1 : -1);
+
+  if (now - lastWheelAt > WHEEL_RESET_MS || Math.sign(primary) !== Math.sign(wheelTotal || primary)) {
+    wheelTotal = 0;
+  }
+
+  lastWheelAt = now;
+  wheelTotal += primary;
+
+  if (Math.abs(wheelTotal) >= WHEEL_THRESHOLD) {
+    route(wheelTotal > 0 ? 1 : -1);
+  }
 }
 
 function onTouchStart(event) {
@@ -80,11 +122,11 @@ function onTouchStart(event) {
 
 function onTouchEnd(event) {
   const touch = event.changedTouches?.[0];
-  if (!touch || isTypingTarget(event.target)) return;
+  if (!touch || isTypingTarget(event.target) || isScrollableTarget(event.target)) return;
   const dx = touch.clientX - touchStartX;
   const dy = touch.clientY - touchStartY;
   const elapsed = Date.now() - touchStartTime;
-  if (elapsed > 900) return;
+  if (elapsed > 850) return;
   const primary = Math.abs(dx) > Math.abs(dy) ? dx : -dy;
   if (Math.abs(primary) < SWIPE_THRESHOLD) return;
   route(primary < 0 ? 1 : -1);
