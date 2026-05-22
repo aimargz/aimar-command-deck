@@ -1,13 +1,16 @@
 const AIMAR_MORPH_MS = 420;
-const AIMAR_LOCK_MS = 760;
-const WHEEL_THRESHOLD = 72;
-const WHEEL_RESET_MS = 220;
+const AIMAR_LOCK_MS = 820;
+const DESKTOP_GESTURE_LOCK_MS = 1450;
+const WHEEL_THRESHOLD = 96;
+const WHEEL_RESET_MS = 260;
 const SWIPE_THRESHOLD = 86;
 
 let locked = false;
 let wheelTotal = 0;
 let lastWheelAt = 0;
 let lastRouteAt = 0;
+let wheelGestureLockedUntil = 0;
+let wheelReleaseTimer = null;
 let touchStartX = 0;
 let touchStartY = 0;
 let touchStartTime = 0;
@@ -69,16 +72,17 @@ function ensureToolLinks() {
 
 function route(direction) {
   const now = performance.now();
-  if (locked || now - lastRouteAt < AIMAR_LOCK_MS) return;
-  if (isTypingTarget(document.activeElement)) return;
+  if (locked || now - lastRouteAt < AIMAR_LOCK_MS) return false;
+  if (isTypingTarget(document.activeElement)) return false;
 
   const { prev, next } = getFooterButtons();
   const button = direction > 0 ? next : prev;
-  if (!canClick(button)) return;
+  if (!canClick(button)) return false;
 
   locked = true;
   lastRouteAt = now;
   wheelTotal = 0;
+  wheelGestureLockedUntil = now + DESKTOP_GESTURE_LOCK_MS;
 
   const body = document.body;
   body.classList.remove('aimar-morph-forward', 'aimar-morph-back', 'aimar-morph-settle');
@@ -94,6 +98,8 @@ function route(direction) {
     body.classList.remove('aimar-morph-settle');
     locked = false;
   }, AIMAR_LOCK_MS);
+
+  return true;
 }
 
 function onWheel(event) {
@@ -106,6 +112,16 @@ function onWheel(event) {
 
   event.preventDefault();
 
+  if (wheelReleaseTimer) window.clearTimeout(wheelReleaseTimer);
+  wheelReleaseTimer = window.setTimeout(() => {
+    wheelTotal = 0;
+    wheelGestureLockedUntil = 0;
+  }, 360);
+
+  if (!isMobile() && (locked || now < wheelGestureLockedUntil)) {
+    return;
+  }
+
   if (now - lastWheelAt > WHEEL_RESET_MS || Math.sign(primary) !== Math.sign(wheelTotal || primary)) {
     wheelTotal = 0;
   }
@@ -113,11 +129,14 @@ function onWheel(event) {
   lastWheelAt = now;
   wheelTotal += primary;
 
-  const fastIntent = Math.abs(primary) >= 54;
+  const fastIntent = Math.abs(primary) >= 82;
   const accumulatedIntent = Math.abs(wheelTotal) >= WHEEL_THRESHOLD;
 
   if (fastIntent || accumulatedIntent) {
-    route((fastIntent ? primary : wheelTotal) > 0 ? 1 : -1);
+    const didRoute = route((fastIntent ? primary : wheelTotal) > 0 ? 1 : -1);
+    if (didRoute && !isMobile()) {
+      wheelGestureLockedUntil = performance.now() + DESKTOP_GESTURE_LOCK_MS;
+    }
   }
 }
 
