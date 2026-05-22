@@ -1,187 +1,289 @@
-/* Final override: make the multi-axis orb visible, circular, and separate the Aimar wordmark. */
+/* Aimar V10: animated blue neural orb. No A-symbol, no trainer hardware, no random badge geometry. */
 :root {
   --aimar-cyan: #7defff;
-  --aimar-blue: #78a7ff;
+  --aimar-blue: #3d8bff;
+  --aimar-deep-blue: #071a3a;
+  --aimar-bg-x: 50%;
+  --aimar-bg-y: 28%;
+  --aimar-repel-x: 0px;
+  --aimar-repel-y: 0px;
+  --aimar-tilt-x: 0deg;
+  --aimar-tilt-y: 0deg;
+  --aimar-scale: 1;
 }
 
-/* Keep the spatial deck alive without letting it bury the logo. */
 body {
   background:
-    radial-gradient(circle at var(--aimar-bg-x, 50%) var(--aimar-bg-y, 28%), rgba(125,239,255,.14), transparent 30%),
-    radial-gradient(circle at 76% 20%, rgba(120,167,255,.08), transparent 36%),
-    radial-gradient(circle at 22% 84%, rgba(90,255,210,.035), transparent 38%),
-    linear-gradient(180deg,#03070c 0%,#050a11 48%,#020409 100%) !important;
+    radial-gradient(circle at var(--aimar-bg-x) var(--aimar-bg-y), rgba(125,239,255,.15), transparent 31%),
+    radial-gradient(circle at 72% 18%, rgba(61,139,255,.12), transparent 35%),
+    radial-gradient(circle at 20% 82%, rgba(90,255,220,.035), transparent 38%),
+    linear-gradient(180deg,#02050a 0%,#040a12 48%,#010309 100%) !important;
 }
 
-/* These higher-specificity rules neutralize the curved-monitor pass that was flattening the orb into ghost rings. */
-body.aimar-morph-ready .aurora-orb {
+/* The deck atmosphere stays alive, but the logo becomes the main animated object. */
+body::before {
+  opacity: .18 !important;
+  background:
+    radial-gradient(ellipse at 50% 16%, rgba(255,255,255,.075), transparent 24%),
+    radial-gradient(ellipse at 22% 50%, rgba(125,239,255,.065), transparent 42%),
+    radial-gradient(ellipse at 84% 56%, rgba(61,139,255,.070), transparent 44%),
+    linear-gradient(90deg, transparent 0 18%, rgba(125,239,255,.024) 31%, transparent 50% 56%, rgba(255,255,255,.022) 74%, transparent 100%) !important;
+  background-size: 100% 100% !important;
+  mask-image: radial-gradient(ellipse at center, black 0%, transparent 82%) !important;
+  animation: aimarDeckDrift 32s ease-in-out infinite alternate !important;
+}
+
+body::after {
+  opacity: .095 !important;
+  background:
+    linear-gradient(115deg, transparent 0 44%, rgba(125,239,255,.13) 49%, transparent 55%),
+    radial-gradient(circle at 20% 30%, rgba(125,239,255,.12) 0 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 65%, rgba(226,244,255,.075) 0 1px, transparent 1.5px) !important;
+  background-size: 300% 100%, 132px 132px, 184px 184px !important;
+  animation: aimarAmbientSweep 38s ease-in-out infinite alternate !important;
+}
+
+/* Hide old icon attempts only. Keep the injected neural orb. */
+.aurora-orb > div.absolute,
+.aurora-orb > svg,
+.aurora-orb .aimar-gyro,
+.aurora-orb .aimar-neural-logo,
+.aurora-orb .aimar-logo-fallback {
+  display: none !important;
+}
+
+body.aimar-morph-ready .aurora-orb,
+body.aimar-brand-polish-ready .aurora-orb,
+.aurora-orb {
   position: relative !important;
-  width: 220px !important;
-  height: 220px !important;
-  min-width: 220px !important;
-  min-height: 220px !important;
+  width: 238px !important;
+  height: 238px !important;
+  min-width: 238px !important;
+  min-height: 238px !important;
   aspect-ratio: 1 / 1 !important;
-  margin-bottom: 2.25rem !important;
+  margin-bottom: 2.35rem !important;
+  border: 0 !important;
   border-radius: 50% !important;
   overflow: visible !important;
   display: grid !important;
   place-items: center !important;
-  background:
-    radial-gradient(circle at 31% 23%, rgba(255,255,255,.92) 0 2.6%, rgba(255,255,255,.36) 4%, transparent 16%),
-    radial-gradient(circle at 47% 42%, rgba(255,255,255,.22), transparent 25%),
-    radial-gradient(circle at 50% 50%, rgba(125,239,255,.19), transparent 37%),
-    radial-gradient(circle at 63% 68%, rgba(120,167,255,.15), transparent 44%),
-    linear-gradient(145deg, rgba(255,255,255,.19), rgba(125,239,255,.04) 34%, rgba(7,16,30,.18) 66%, rgba(255,255,255,.10)),
-    rgba(3,8,14,.13) !important;
-  box-shadow:
-    inset 0 1px 22px rgba(255,255,255,.18),
-    inset 24px -20px 54px rgba(125,239,255,.055),
-    inset -26px 22px 64px rgba(120,167,255,.065),
-    inset 0 -26px 50px rgba(0,0,0,.16),
-    0 0 42px rgba(125,239,255,.22),
-    0 38px 90px rgba(0,0,0,.40) !important;
-  transform: translate3d(var(--aimar-repel-x, 0px), var(--aimar-repel-y, 0px), 0) translateZ(96px) scale(var(--aimar-scale, 1)) !important;
-  perspective: 860px !important;
-  transform-style: preserve-3d !important;
-  filter: drop-shadow(0 0 22px rgba(125,239,255,.26)) drop-shadow(0 0 72px rgba(120,167,255,.16)) !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
   cursor: crosshair !important;
+  perspective: 920px !important;
+  transform-style: preserve-3d !important;
+  transform: translate3d(var(--aimar-repel-x), var(--aimar-repel-y), 0) translateZ(96px) scale(var(--aimar-scale)) !important;
+  filter: drop-shadow(0 0 24px rgba(125,239,255,.34)) drop-shadow(0 0 86px rgba(61,139,255,.22)) !important;
+  transition: filter .22s ease !important;
 }
 
-body.aimar-morph-ready .aurora-orb:hover {
+body.aimar-morph-ready .aurora-orb:hover,
+.aurora-orb:hover {
   --aimar-scale: 1.045;
-  filter: drop-shadow(0 0 28px rgba(125,239,255,.42)) drop-shadow(0 0 92px rgba(120,167,255,.24)) !important;
+  filter: drop-shadow(0 0 34px rgba(125,239,255,.54)) drop-shadow(0 0 112px rgba(61,139,255,.34)) !important;
 }
 
+/* Fallback blue orb if JS is delayed or blocked. */
 body.aimar-morph-ready .aurora-orb::before,
-body.aimar-morph-ready .aurora-orb::after {
+.aurora-orb::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 8px !important;
+  border-radius: 50% !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  background:
+    radial-gradient(circle at 31% 22%, rgba(255,255,255,.92) 0 2.5%, rgba(255,255,255,.38) 4%, transparent 16%),
+    radial-gradient(circle at 42% 35%, rgba(255,255,255,.20), transparent 22%),
+    radial-gradient(circle at 50% 50%, rgba(13,82,170,.58), rgba(6,26,74,.34) 42%, rgba(1,5,16,.10) 64%, rgba(125,239,255,.10) 100%),
+    rgba(3,8,14,.12) !important;
+  border: 1px solid rgba(165,235,255,.34) !important;
+  box-shadow:
+    inset 0 0 32px rgba(255,255,255,.11),
+    inset 24px -22px 64px rgba(125,239,255,.075),
+    inset -26px 22px 70px rgba(61,139,255,.12),
+    0 0 46px rgba(125,239,255,.24) !important;
+  mask-image: none !important;
+  animation: aimarOrbBreathe 7s ease-in-out infinite !important;
   transform: none !important;
 }
 
-/* Fallback visible shell even if JS arrives late. */
-body.aimar-morph-ready .aurora-orb::before {
+body.aimar-morph-ready .aurora-orb::after,
+.aurora-orb::after {
   content: '' !important;
   position: absolute !important;
-  inset: -1px !important;
+  inset: -18px !important;
   border-radius: 50% !important;
   pointer-events: none !important;
-  border: 1px solid rgba(226,248,255,.38) !important;
+  z-index: 0 !important;
+  border: 1px solid rgba(125,239,255,.20) !important;
   background:
-    conic-gradient(from 210deg, transparent 0 14deg, rgba(255,255,255,.38) 26deg, rgba(125,239,255,.16) 43deg, transparent 70deg 160deg, rgba(255,255,255,.18) 184deg, transparent 220deg 360deg),
-    radial-gradient(circle at 50% 50%, transparent 0 55%, rgba(125,239,255,.16) 58%, transparent 63%) !important;
-  mask-image: radial-gradient(circle, transparent 0 18%, black 21% 100%) !important;
-  animation: aimarChromeOrbit 18s linear infinite !important;
-  z-index: 2 !important;
+    conic-gradient(from 0deg, transparent 0 16deg, rgba(125,239,255,.30) 25deg, transparent 42deg 82deg, rgba(255,255,255,.24) 96deg, transparent 112deg 172deg, rgba(125,239,255,.24) 190deg, transparent 210deg 294deg, rgba(61,139,255,.20) 314deg, transparent 330deg 360deg) !important;
+  mask-image: radial-gradient(circle, transparent 0 43%, black 47% 49%, transparent 54%) !important;
+  box-shadow: 0 0 30px rgba(125,239,255,.12), inset 0 0 32px rgba(125,239,255,.06) !important;
+  opacity: .82 !important;
+  animation: aimarHaloSpin 22s linear infinite !important;
+  transform: none !important;
 }
 
-body.aimar-morph-ready .aurora-orb::after {
-  content: '' !important;
-  position: absolute !important;
-  inset: -22px !important;
-  border-radius: 50% !important;
-  pointer-events: none !important;
-  border: 1px solid rgba(125,239,255,.18) !important;
-  box-shadow: 0 0 24px rgba(125,239,255,.10), inset 0 0 28px rgba(125,239,255,.05) !important;
-  animation: aimarOuterFallback 14s ease-in-out infinite !important;
-  z-index: 1 !important;
-}
-
-/* Force the injected gyroscope to sit above the fallback shell. */
-body.aimar-morph-ready .aurora-orb .aimar-gyro {
+/* JS-injected animated neural orb. */
+.aurora-orb .aimar-neural-orb {
   display: block !important;
   position: absolute !important;
   inset: 0 !important;
   width: 100% !important;
   height: 100% !important;
   border-radius: 50% !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-  z-index: 8 !important;
+  overflow: visible !important;
   transform-style: preserve-3d !important;
-  transform: rotateX(var(--aimar-tilt-x, 0deg)) rotateY(var(--aimar-tilt-y, 0deg)) !important;
+  transform: rotateX(var(--aimar-tilt-x)) rotateY(var(--aimar-tilt-y)) !important;
+  transition: transform .18s cubic-bezier(.16,1,.3,1) !important;
+  z-index: 8 !important;
 }
 
-body.aimar-morph-ready .aurora-orb .aimar-gyro-core {
-  display: block !important;
-  position: absolute !important;
-  inset: 58px !important;
-  border-radius: 50% !important;
-  opacity: 1 !important;
-  z-index: 5 !important;
+.aimar-orb-sphere,
+.aimar-orb-glass,
+.aimar-orb-core,
+.aimar-orb-aura,
+.aimar-orbit {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.aimar-orb-sphere {
+  inset: 16px;
+  z-index: 2;
+  overflow: hidden;
   background:
-    radial-gradient(circle at 30% 22%, rgba(255,255,255,.95) 0 6%, rgba(255,255,255,.35) 8%, transparent 22%),
-    radial-gradient(circle at 48% 43%, rgba(125,239,255,.28), transparent 40%),
-    radial-gradient(circle at 62% 70%, rgba(120,167,255,.22), transparent 45%),
-    rgba(3,8,14,.18) !important;
+    radial-gradient(circle at 29% 21%, rgba(255,255,255,.96) 0 2.3%, rgba(255,255,255,.36) 4%, transparent 16%),
+    radial-gradient(circle at 42% 34%, rgba(255,255,255,.20), transparent 25%),
+    radial-gradient(circle at 50% 50%, rgba(24,106,220,.58), rgba(4,39,104,.32) 43%, rgba(2,7,22,.16) 68%, rgba(125,239,255,.12) 100%),
+    linear-gradient(145deg, rgba(255,255,255,.16), rgba(125,239,255,.045) 38%, rgba(0,0,0,.20) 72%, rgba(255,255,255,.08));
+  border: 1px solid rgba(186,241,255,.32);
   box-shadow:
-    inset 0 1px 22px rgba(255,255,255,.20),
-    inset 15px -14px 36px rgba(125,239,255,.08),
-    inset -16px 16px 40px rgba(120,167,255,.08),
-    0 0 38px rgba(125,239,255,.30) !important;
+    inset 0 1px 28px rgba(255,255,255,.18),
+    inset 34px -26px 74px rgba(125,239,255,.075),
+    inset -38px 30px 88px rgba(61,139,255,.12),
+    inset 0 -36px 68px rgba(0,0,0,.22),
+    0 0 54px rgba(125,239,255,.28),
+    0 30px 84px rgba(0,0,0,.42);
+  backdrop-filter: blur(12px) saturate(165%);
+  -webkit-backdrop-filter: blur(12px) saturate(165%);
+  transform: translateZ(20px);
+  animation: aimarOrbBreathe 7s ease-in-out infinite;
 }
 
-body.aimar-morph-ready .aurora-orb .aimar-gyro-ring {
-  display: block !important;
+.aimar-orb-core {
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  z-index: 7;
+  background: #f2fdff;
+  box-shadow: 0 0 20px rgba(125,239,255,.95), 0 0 64px rgba(61,139,255,.46), 0 0 118px rgba(125,239,255,.18);
+  transform: translateZ(44px);
+  animation: aimarCorePulse 2.8s ease-in-out infinite;
+}
+
+.aimar-orb-glass {
+  inset: 16px;
+  z-index: 8;
+  border: 1px solid rgba(255,255,255,.18);
+  background:
+    conic-gradient(from 215deg, transparent 0 18deg, rgba(255,255,255,.42) 30deg, rgba(125,239,255,.14) 48deg, transparent 70deg 176deg, rgba(255,255,255,.18) 196deg, transparent 230deg 360deg),
+    radial-gradient(circle at 35% 22%, rgba(255,255,255,.26), transparent 16%),
+    radial-gradient(circle at 72% 76%, rgba(61,139,255,.16), transparent 34%);
+  mask-image: radial-gradient(circle, transparent 0 17%, black 21% 100%);
+  mix-blend-mode: screen;
+  transform: translateZ(52px);
+  animation: aimarGlassSpin 24s linear infinite;
+}
+
+.aimar-orb-aura {
+  inset: -28px;
+  z-index: 1;
+  border: 1px solid rgba(125,239,255,.16);
+  box-shadow: 0 0 42px rgba(125,239,255,.13), inset 0 0 42px rgba(61,139,255,.06);
+  background: radial-gradient(circle, rgba(125,239,255,.08), transparent 58%);
+  animation: aimarAuraPulse 6s ease-in-out infinite;
+}
+
+.aimar-orbit {
+  inset: -9px;
+  z-index: 5;
+  border: 1.4px solid rgba(154,232,255,.35);
+  box-shadow: 0 0 20px rgba(125,239,255,.13), inset 0 0 24px rgba(125,239,255,.04);
+  transform-style: preserve-3d;
+}
+.aimar-orbit.orbit-one { transform: rotateX(68deg) rotateZ(8deg); animation: aimarOrbitOne 18s linear infinite; }
+.aimar-orbit.orbit-two { transform: rotateY(66deg) rotateZ(30deg); animation: aimarOrbitTwo 23s linear infinite reverse; border-color: rgba(125,239,255,.28); }
+.aimar-orbit.orbit-three { inset: 14px; transform: rotateX(22deg) rotateY(61deg) rotateZ(90deg); animation: aimarOrbitThree 28s linear infinite; opacity: .58; }
+
+.aimar-neural-canvas {
   position: absolute !important;
-  inset: 18px !important;
+  inset: -34px !important;
+  width: calc(100% + 68px) !important;
+  height: calc(100% + 68px) !important;
   border-radius: 50% !important;
-  border: 2.4px solid rgba(226,248,255,.72) !important;
-  box-shadow: 0 0 24px rgba(125,239,255,.22), inset 0 0 22px rgba(255,255,255,.04) !important;
-  opacity: 1 !important;
-  z-index: 4 !important;
-}
-
-body.aimar-morph-ready .aurora-orb .aimar-gyro-ring.ring-a { transform: rotateX(68deg) rotateZ(0deg) !important; animation: aimarRingAFinal 10s linear infinite !important; }
-body.aimar-morph-ready .aurora-orb .aimar-gyro-ring.ring-b { transform: rotateY(68deg) rotateZ(22deg) !important; animation: aimarRingBFinal 13s linear infinite reverse !important; border-color: rgba(125,239,255,.66) !important; }
-body.aimar-morph-ready .aurora-orb .aimar-gyro-ring.ring-c { transform: rotateX(22deg) rotateY(62deg) rotateZ(90deg) !important; animation: aimarRingCFinal 16s linear infinite !important; border-color: rgba(180,220,255,.54) !important; opacity: .88 !important; }
-body.aimar-morph-ready .aurora-orb .aimar-gyro-ring.ring-d { inset: 39px !important; transform: rotateX(76deg) rotateZ(48deg) !important; animation: aimarRingDFinal 8s linear infinite !important; border-color: rgba(125,239,255,.42) !important; opacity: .74 !important; }
-
-body.aimar-morph-ready .aurora-orb .aimar-orb-network {
-  display: block !important;
-  position: absolute !important;
-  inset: -38px !important;
-  opacity: 1 !important;
-  z-index: 10 !important;
+  z-index: 6 !important;
   pointer-events: none !important;
   mix-blend-mode: screen !important;
+  opacity: .98 !important;
+  transform: translateZ(58px);
 }
 
-body.aimar-morph-ready .aurora-orb .aimar-orb-network canvas {
-  display: block !important;
-  width: 100% !important;
-  height: 100% !important;
-  opacity: 1 !important;
-}
-
-/* Wordmark spacing fix: stop the A and i from colliding. */
+/* Wordmark spacing: positive tracking and per-letter fallback if JS wraps it. */
 body.aimar-brand-polish-ready main section h1 {
-  letter-spacing: 0.018em !important;
+  letter-spacing: .034em !important;
   font-weight: 620 !important;
+  font-kerning: none !important;
   text-rendering: geometricPrecision !important;
-  font-kerning: normal !important;
+  cursor: crosshair !important;
 }
+body.aimar-brand-polish-ready main section h1:hover { letter-spacing: .044em !important; }
+.aimar-wordmark-kerned { display: inline-flex; align-items: baseline; gap: .025em; letter-spacing: 0 !important; }
+.aimar-wordmark-kerned span:first-child { margin-right: .045em; }
+.aimar-wordmark-kerned span:nth-child(2) { margin-right: .018em; }
+.aimar-wordmark-kerned span { display: inline-block; }
 
-body.aimar-brand-polish-ready main section h1:hover {
-  letter-spacing: 0.026em !important;
-}
+.aimar-header-mark { display: inline-grid !important; place-items: center; width: 22px; height: 22px; margin-right: 4px; border-radius: 50%; border: 1px solid rgba(125,239,255,.24); background: radial-gradient(circle,rgba(125,239,255,.12),rgba(0,0,0,.16)); box-shadow: 0 0 10px rgba(125,239,255,.12); }
+.aimar-header-mark svg { display: none !important; }
+.aimar-header-mark::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #dffcff; box-shadow: 0 0 8px rgba(125,239,255,.55); }
 
-@keyframes aimarChromeOrbit { to { transform: rotate(360deg); } }
-@keyframes aimarOuterFallback { 0%,100% { opacity: .46; transform: scale(.99); } 50% { opacity: .78; transform: scale(1.035); } }
-@keyframes aimarRingAFinal { to { transform: rotateX(68deg) rotateZ(360deg); } }
-@keyframes aimarRingBFinal { to { transform: rotateY(68deg) rotateZ(382deg); } }
-@keyframes aimarRingCFinal { to { transform: rotateX(22deg) rotateY(62deg) rotateZ(450deg); } }
-@keyframes aimarRingDFinal { to { transform: rotateX(76deg) rotateZ(408deg); } }
+@keyframes aimarDeckDrift { 0% { transform: translate3d(-1%,0,0) scale(1); } 100% { transform: translate3d(1%,.7%,0) scale(1.022); } }
+@keyframes aimarAmbientSweep { from { background-position: 0% 50%,0 0,0 0; } to { background-position: 100% 50%,32px 48px,-42px 64px; } }
+@keyframes aimarOrbBreathe { 0%,100% { opacity: .94; transform: translateZ(20px) scale(.992); } 50% { opacity: 1; transform: translateZ(20px) scale(1.018); } }
+@keyframes aimarCorePulse { 0%,100% { opacity: .76; transform: translateZ(44px) scale(.72); } 50% { opacity: 1; transform: translateZ(44px) scale(1.18); } }
+@keyframes aimarGlassSpin { to { transform: translateZ(52px) rotate(360deg); } }
+@keyframes aimarAuraPulse { 0%,100% { opacity: .45; transform: scale(.985); } 50% { opacity: .86; transform: scale(1.035); } }
+@keyframes aimarHaloSpin { to { transform: rotate(360deg); } }
+@keyframes aimarOrbitOne { to { transform: rotateX(68deg) rotateZ(368deg); } }
+@keyframes aimarOrbitTwo { to { transform: rotateY(66deg) rotateZ(390deg); } }
+@keyframes aimarOrbitThree { to { transform: rotateX(22deg) rotateY(61deg) rotateZ(450deg); } }
 
 @media (max-width: 900px) {
-  body.aimar-morph-ready .aurora-orb {
-    width: 150px !important;
-    height: 150px !important;
-    min-width: 150px !important;
-    min-height: 150px !important;
+  body.aimar-morph-ready .aurora-orb,
+  body.aimar-brand-polish-ready .aurora-orb,
+  .aurora-orb {
+    width: 156px !important;
+    height: 156px !important;
+    min-width: 156px !important;
+    min-height: 156px !important;
     margin-bottom: 1.85rem !important;
   }
-  body.aimar-morph-ready .aurora-orb .aimar-gyro-core { inset: 41px !important; }
-  body.aimar-morph-ready .aurora-orb .aimar-gyro-ring { inset: 12px !important; }
-  body.aimar-morph-ready .aurora-orb .aimar-gyro-ring.ring-d { inset: 28px !important; }
-  body.aimar-morph-ready .aurora-orb .aimar-orb-network { inset: -30px !important; }
-  body.aimar-brand-polish-ready main section h1 { letter-spacing: 0.012em !important; }
+  .aimar-orb-sphere, .aimar-orb-glass { inset: 11px; }
+  .aimar-orb-core { width: 10px; height: 10px; margin: -5px 0 0 -5px; }
+  .aimar-orbit { inset: -6px; }
+  .aimar-orbit.orbit-three { inset: 9px; }
+  .aimar-neural-canvas { inset: -24px !important; width: calc(100% + 48px) !important; height: calc(100% + 48px) !important; }
+  body.aimar-brand-polish-ready main section h1 { letter-spacing: .020em !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aimar-orb-sphere, .aimar-orb-core, .aimar-orb-glass, .aimar-orb-aura, .aimar-orbit, .aurora-orb::before, .aurora-orb::after { animation: none !important; }
+  .aimar-neural-canvas { opacity: .45 !important; }
 }
