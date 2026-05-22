@@ -1,8 +1,8 @@
-const AIMAR_MORPH_MS = 420;
-const AIMAR_LOCK_MS = 980;
-const WHEEL_THRESHOLD = 145;
-const WHEEL_RESET_MS = 180;
-const SWIPE_THRESHOLD = 58;
+const AIMAR_MORPH_MS = 500;
+const AIMAR_LOCK_MS = 700;
+const WHEEL_THRESHOLD = 72;
+const WHEEL_RESET_MS = 220;
+const SWIPE_THRESHOLD = 48;
 
 let locked = false;
 let wheelTotal = 0;
@@ -17,16 +17,8 @@ function isTypingTarget(target) {
   return tag === 'input' || tag === 'textarea' || target?.isContentEditable;
 }
 
-function isScrollableTarget(target) {
-  let node = target;
-  while (node && node !== document.body && node !== document.documentElement) {
-    const style = window.getComputedStyle(node);
-    const canScrollY = /(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 4;
-    const canScrollX = /(auto|scroll)/.test(style.overflowX) && node.scrollWidth > node.clientWidth + 4;
-    if (canScrollY || canScrollX) return true;
-    node = node.parentElement;
-  }
-  return false;
+function isInteractiveTarget(target) {
+  return Boolean(target?.closest?.('a, button, input, textarea, select, [role="button"], [contenteditable="true"]'));
 }
 
 function normalizeWheel(event) {
@@ -82,7 +74,7 @@ function route(direction) {
     button.click();
     body.classList.remove('aimar-morph-forward', 'aimar-morph-back');
     body.classList.add('aimar-morph-settle');
-  }, Math.floor(AIMAR_MORPH_MS * 0.52));
+  }, Math.floor(AIMAR_MORPH_MS * 0.50));
 
   window.setTimeout(() => {
     body.classList.remove('aimar-morph-settle');
@@ -92,7 +84,7 @@ function route(direction) {
 
 function onWheel(event) {
   const paletteOpen = document.querySelector('.fixed.inset-0.z-50');
-  if (paletteOpen || event.ctrlKey || isTypingTarget(event.target) || isScrollableTarget(event.target)) return;
+  if (paletteOpen || event.ctrlKey || isTypingTarget(event.target) || isInteractiveTarget(event.target)) return;
 
   const now = performance.now();
   const primary = normalizeWheel(event);
@@ -107,8 +99,11 @@ function onWheel(event) {
   lastWheelAt = now;
   wheelTotal += primary;
 
-  if (Math.abs(wheelTotal) >= WHEEL_THRESHOLD) {
-    route(wheelTotal > 0 ? 1 : -1);
+  const fastIntent = Math.abs(primary) >= 54;
+  const accumulatedIntent = Math.abs(wheelTotal) >= WHEEL_THRESHOLD;
+
+  if (fastIntent || accumulatedIntent) {
+    route((fastIntent ? primary : wheelTotal) > 0 ? 1 : -1);
   }
 }
 
@@ -122,11 +117,11 @@ function onTouchStart(event) {
 
 function onTouchEnd(event) {
   const touch = event.changedTouches?.[0];
-  if (!touch || isTypingTarget(event.target) || isScrollableTarget(event.target)) return;
+  if (!touch || isTypingTarget(event.target) || isInteractiveTarget(event.target)) return;
   const dx = touch.clientX - touchStartX;
   const dy = touch.clientY - touchStartY;
   const elapsed = Date.now() - touchStartTime;
-  if (elapsed > 850) return;
+  if (elapsed > 900) return;
   const primary = Math.abs(dx) > Math.abs(dy) ? dx : -dy;
   if (Math.abs(primary) < SWIPE_THRESHOLD) return;
   route(primary < 0 ? 1 : -1);
