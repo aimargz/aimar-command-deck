@@ -1,0 +1,96 @@
+:root {
+  --aimar-morph-ms: 500ms;
+  --aimar-morph-ease: cubic-bezier(.16, 1, .3, 1);
+}
+
+body.aimar-morph-ready main section {
+  overscroll-behavior: contain;
+}
+
+body.aimar-morph-ready main section > div:first-child {
+  transform-origin: center center;
+  will-change: transform, opacity, filter;
+  backface-visibility: hidden;
+}
+
+body.aimar-morph-ready main section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(119,247,255,.16), transparent 35%),
+    linear-gradient(110deg, transparent 0 42%, rgba(119,247,255,.14) 50%, transparent 58%);
+  mix-blend-mode: screen;
+  transition: opacity var(--aimar-morph-ms) var(--aimar-morph-ease);
+}
+
+body.aimar-morph-forward main section::before,
+body.aimar-morph-back main section::before {
+  opacity: .86;
+}
+
+body.aimar-morph-forward main section > div:first-child {
+  animation: aimarMorphForward var(--aimar-morph-ms) var(--aimar-morph-ease) both;
+}
+
+body.aimar-morph-back main section > div:first-child {
+  animation: aimarMorphBack var(--aimar-morph-ms) var(--aimar-morph-ease) both;
+}
+
+body.aimar-morph-settle main section > div:first-child {
+  animation: aimarMorphSettle 420ms var(--aimar-morph-ease) both;
+}
+
+@keyframes aimarMorphForward {
+  0% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0) saturate(1); }
+  44% { opacity: .52; transform: translate3d(-26px,0,0) scale(.982); filter: blur(4px) saturate(1.12); }
+  56% { opacity: .38; transform: translate3d(24px,0,0) scale(.978); filter: blur(5px) saturate(1.16); }
+  100% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0) saturate(1); }
+}
+
+@keyframes aimarMorphBack {
+  0% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0) saturate(1); }
+  44% { opacity: .52; transform: translate3d(26px,0,0) scale(.982); filter: blur(4px) saturate(1.12); }
+  56% { opacity: .38; transform: translate3d(-24px,0,0) scale(.978); filter: blur(5px) saturate(1.16); }
+  100% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0) saturate(1); }
+}
+
+@keyframes aimarMorphSettle {
+  0% { opacity: .70; transform: translate3d(0,8px,0) scale(.990); filter: blur(3px) saturate(1.08); }
+  100% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0) saturate(1); }
+}
+
+body.aimar-morph-ready footer::before {
+  content: 'scroll / swipe to route modules';
+  margin-right: auto;
+  margin-left: 1rem;
+  color: rgba(148,163,184,.42);
+  font: 10px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  body.aimar-morph-ready footer::before { display: none; }
+  @keyframes aimarMorphForward {
+    0% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0); }
+    48% { opacity: .46; transform: translate3d(0,-18px,0) scale(.984); filter: blur(4px); }
+    100% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0); }
+  }
+  @keyframes aimarMorphBack {
+    0% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0); }
+    48% { opacity: .46; transform: translate3d(0,18px,0) scale(.984); filter: blur(4px); }
+    100% { opacity: 1; transform: translate3d(0,0,0) scale(1); filter: blur(0); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.aimar-morph-forward main section > div:first-child,
+  body.aimar-morph-back main section > div:first-child,
+  body.aimar-morph-settle main section > div:first-child {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Aimar Nested Tools Lab - recursive operating modules" />
+    <link rel="stylesheet" href="/aimar-tools.css" />
+    <title>Aimar Nested Tools Lab</title>
+  </head>
+  <body>
+    <main class="lab-shell">
+      <nav class="lab-topbar">
+        <a href="/" class="back-link">Aimar Command Deck</a>
+        <div class="status-strip"><span></span> Nested tools lab / share-safe prototype</div>
+      </nav>
+
+      <section class="lab-hero">
+        <div class="eyebrow">recursive operating interface</div>
+        <h1>Aimar Nested Tools Lab</h1>
+        <p>Russian-doll style modules: each system opens into tools, each tool opens into workflows, and each workflow opens into governed actions.</p>
+      </section>
+
+      <section class="nested-grid" aria-label="Nested Aimar modules">
+        <aside class="module-rail">
+          <button class="module-button active" data-module="founder">Founder OS</button>
+          <button class="module-button" data-module="workflow">Workflow Engine</button>
+          <button class="module-button" data-module="security">Security / OPSEC</button>
+          <button class="module-button" data-module="research">Research Vault</button>
+          <button class="module-button" data-module="client">Client Ops</button>
+        </aside>
+
+        <section class="doll-stage">
+          <div class="doll-layer layer-one">
+            <div class="layer-label">Layer 01 / System</div>
+            <h2 id="moduleTitle">Founder OS</h2>
+            <p id="moduleSummary">Personal command surface for priorities, context, tasks, and review loops.</p>
+          </div>
+          <div class="doll-layer layer-two">
+            <div class="layer-label">Layer 02 / Tools</div>
+            <div id="toolList" class="tool-list"></div>
+          </div>
+          <div class="doll-layer layer-three">
+            <div class="layer-label">Layer 03 / Workflow</div>
+            <div id="workflowPanel" class="workflow-panel"></div>
+          </div>
+        </section>
+      </section>
+
+      <section class="lab-console">
+        <div>
+          <h3>Recursive blueprint generator</h3>
+          <p>Type a system or problem. The lab decomposes it into nested modules, tool primitives, and governed next actions.</p>
+        </div>
+        <div class="console-box">
+          <input id="blueprintInput" placeholder="e.g. internship engine, client intake, research vault, ODSM dashboard" />
+          <button id="generateBlueprint">Generate blueprint</button>
+        </div>
+        <pre id="blueprintOutput" class="output-panel">Awaiting input...</pre>
+      </section>
+    </main>
+    <script src="/aimar-tools.js"></script>
+  </body>
+</html>
