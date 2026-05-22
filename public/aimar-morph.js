@@ -1,8 +1,8 @@
-const AIMAR_MORPH_MS = 500;
-const AIMAR_LOCK_MS = 700;
+const AIMAR_MORPH_MS = 420;
+const AIMAR_LOCK_MS = 760;
 const WHEEL_THRESHOLD = 72;
 const WHEEL_RESET_MS = 220;
-const SWIPE_THRESHOLD = 48;
+const SWIPE_THRESHOLD = 86;
 
 let locked = false;
 let wheelTotal = 0;
@@ -12,6 +12,8 @@ let touchStartX = 0;
 let touchStartY = 0;
 let touchStartTime = 0;
 
+const isMobile = () => window.matchMedia('(max-width: 760px), (pointer: coarse)').matches;
+
 function isTypingTarget(target) {
   const tag = target?.tagName?.toLowerCase();
   return tag === 'input' || tag === 'textarea' || target?.isContentEditable;
@@ -19,6 +21,18 @@ function isTypingTarget(target) {
 
 function isInteractiveTarget(target) {
   return Boolean(target?.closest?.('a, button, input, textarea, select, [role="button"], [contenteditable="true"]'));
+}
+
+function isScrollableTarget(target) {
+  let node = target;
+  while (node && node !== document.body && node !== document.documentElement) {
+    const style = window.getComputedStyle(node);
+    const canScrollY = /(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 8;
+    const canScrollX = /(auto|scroll)/.test(style.overflowX) && node.scrollWidth > node.clientWidth + 8;
+    if (canScrollY || canScrollX) return true;
+    node = node.parentElement;
+  }
+  return false;
 }
 
 function normalizeWheel(event) {
@@ -38,7 +52,7 @@ function canClick(button) {
 }
 
 function ensureFloatingLink(href, className, text, bottom) {
-  if (document.querySelector(`.${className}`)) return;
+  if (isMobile() || document.querySelector(`.${className}`)) return;
   const link = document.createElement('a');
   link.href = href;
   link.className = `aimar-floating-link ${className}`;
@@ -74,7 +88,7 @@ function route(direction) {
     button.click();
     body.classList.remove('aimar-morph-forward', 'aimar-morph-back');
     body.classList.add('aimar-morph-settle');
-  }, Math.floor(AIMAR_MORPH_MS * 0.50));
+  }, Math.floor(AIMAR_MORPH_MS * 0.48));
 
   window.setTimeout(() => {
     body.classList.remove('aimar-morph-settle');
@@ -117,13 +131,22 @@ function onTouchStart(event) {
 
 function onTouchEnd(event) {
   const touch = event.changedTouches?.[0];
-  if (!touch || isTypingTarget(event.target) || isInteractiveTarget(event.target)) return;
+  if (!touch || isTypingTarget(event.target) || isInteractiveTarget(event.target) || isScrollableTarget(event.target)) return;
+
   const dx = touch.clientX - touchStartX;
   const dy = touch.clientY - touchStartY;
   const elapsed = Date.now() - touchStartTime;
-  if (elapsed > 900) return;
+  if (elapsed > 800) return;
+
+  if (isMobile()) {
+    const mostlyVertical = Math.abs(dy) > Math.abs(dx) * 1.55;
+    if (!mostlyVertical || Math.abs(dy) < SWIPE_THRESHOLD) return;
+    route(dy < 0 ? 1 : -1);
+    return;
+  }
+
   const primary = Math.abs(dx) > Math.abs(dy) ? dx : -dy;
-  if (Math.abs(primary) < SWIPE_THRESHOLD) return;
+  if (Math.abs(primary) < 48) return;
   route(primary < 0 ? 1 : -1);
 }
 
