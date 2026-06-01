@@ -1,0 +1,159 @@
+/* Mobile comfort pass: reduce compression and make the deck read like a mobile command surface, not a squeezed desktop. */
+@media (max-width: 760px), (pointer: coarse) {
+  html,
+  body,
+  #root {
+    min-height: 100%;
+    overflow-x: hidden !important;
+  }
+
+  body {
+    overscroll-behavior-y: auto !important;
+  }
+
+  /* Remove one status layer on mobile. It made the viewport feel cramped. */
+  header + div[class*="h-9"] {
+    display: none !important;
+  }
+
+  header {
+    position: sticky !important;
+    top: 0 !important;
+    min-height: 72px !important;
+    height: auto !important;
+    padding: 0.85rem 1rem !important;
+    background: rgba(5, 8, 13, 0.92) !important;
+  }
+
+  header > div:first-child span:first-of-type {
+    font-size: 1.05rem !important;
+  }
+
+  header [class*="font-mono"] {
+    letter-spacing: .12em !important;
+  }
+
+  /* Switch the slide shell from compressed desktop viewport to breathing mobile flow. */
+  div[class*="h-[calc(100vh-5.75rem)]"] {
+    height: auto !important;
+    min-height: calc(100svh - 72px) !important;
+    display: block !important;
+  }
+
+  main {
+    display: block !important;
+    height: auto !important;
+    min-height: calc(100svh - 72px) !important;
+    overflow: visible !important;
+  }
+
+  main section {
+    display: block !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 1rem 0.85rem 6.75rem !important;
+  }
+
+  main section > div:first-child {
+    height: auto !important;
+    min-height: auto !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+  }
+
+  main section > div:first-child > div {
+    min-height: auto !important;
+  }
+
+  /* Hero spacing: less giant empty frame, more readable hierarchy. */
+  .aurora-orb {
+    width: 8.5rem !important;
+    height: 8.5rem !important;
+    margin-bottom: 1.35rem !important;
+  }
+
+  main section h1 {
+    font-size: clamp(3.6rem, 18vw, 5.2rem) !important;
+    line-height: .92 !important;
+    letter-spacing: .035em !important;
+    margin-right: -.035em !important;
+  }
+
+  main section h1 + p {
+    margin-top: 0.85rem !important;
+    font-size: .78rem !important;
+    letter-spacing: .38em !important;
+  }
+
+  main section h1 + p + p,
+  main section p.text-xl,
+  main section p.text-2xl,
+  main section p.text-lg {
+    width: min(100%, 34rem) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    font-size: 1.02rem !important;
+    line-height: 1.72 !important;
+  }
+
+  main section .grid {
+    grid-template-columns: 1fr !important;
+    gap: 1rem !important;
+  }
+
+  .motion-card,
+  article,
+  [class*="rounded-2xl"],
+  [class*="rounded-3xl"] {
+    border-radius: 1.35rem !important;
+  }
+
+  .motion-card,
+  main section [class*="bg-[#0b0d12]"],
+  main section [class*="bg-black/40"] {
+    background-color: rgba(7, 10, 16, .78) !important;
+  }
+
+  .motion-card {
+    padding: 1.1rem !important;
+  }
+
+  table {
+    min-width: 620px !important;
+  }
+
+  /* Footer becomes a calmer mobile control dock. */
+  footer {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 30 !important;
+    height: auto !important;
+    min-height: 76px !important;
+    padding: .65rem 1rem calc(.65rem + env(safe-area-inset-bottom)) !important;
+    background: rgba(5, 8, 13, .92) !important;
+  }
+
+  footer button {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    border-radius: 1rem !important;
+  }
+}
+
+@media (max-width: 390px) {
+  main section {
+    padding-left: .7rem !important;
+    padding-right: .7rem !important;
+  }
+
+  main section h1 {
+    font-size: clamp(3.25rem, 17vw, 4.5rem) !important;
+  }
+
+  .aurora-orb {
+    width: 7.5rem !important;
+    height: 7.5rem !important;
+  }
+}
