@@ -1,0 +1,3 @@
+Mobile gesture policy update:
+
+Vertical movement on mobile is now reserved for native page scrolling only. Slide routing should not happen from pulling up/down. Mobile slide navigation should happen from the footer buttons or deliberate horizontal swipes only.
