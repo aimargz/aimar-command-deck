@@ -1,0 +1,13 @@
+{
+  "name": "Aimar Command Deck",
+  "short_name": "Aimar",
+  "description": "Operational intelligence infrastructure for workflows, memory, governance, security, and execution.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#05080d",
+  "theme_color": "#05080d",
+  "icons": [
+    { "src": "/favicon.svg?v=6", "sizes": "64x64", "type": "image/svg+xml" }
+  ]
+}

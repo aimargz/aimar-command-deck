@@ -1,0 +1,23 @@
+/* Performance guardrails for the public deck. */
+@media (max-width: 760px), (pointer: coarse) {
+  .motion-card,
+  .magnetic-button,
+  .aurora-orb,
+  .aurora-orb * {
+    transition-duration: 140ms !important;
+  }
+
+  .motion-card {
+    transform: none !important;
+  }
+
+  .aimar-neural-canvas {
+    opacity: .42 !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+  }
+}
