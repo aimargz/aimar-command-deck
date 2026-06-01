@@ -7,6 +7,31 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  html.aimar-mobile-safe-mode .aimar-neural-canvas,
+  html.aimar-mobile-safe-mode .aimar-emblem,
+  html.aimar-mobile-safe-mode .aimar-orbit,
+  html.aimar-mobile-safe-mode .aimar-orb-glass,
+  html.aimar-mobile-safe-mode .aimar-orb-aura,
+  html.aimar-mobile-safe-mode .aimar-brand-mark {
+    display: none !important;
+  }
+
+  html.aimar-mobile-safe-mode .aurora-orb {
+    transform: none !important;
+    transition: none !important;
+    filter: drop-shadow(0 0 20px rgba(117,203,222,.20)) !important;
+  }
+
+  html.aimar-mobile-safe-mode .aurora-orb::before {
+    animation: none !important;
+    opacity: .84 !important;
+  }
+
+  html.aimar-mobile-safe-mode .aurora-orb::after {
+    animation-duration: 28s !important;
+    opacity: .42 !important;
+  }
+
   body {
     background-attachment: scroll !important;
   }
@@ -101,7 +126,6 @@
     display: none !important;
   }
 
-  /* Event tables were the worst congestion point. Let the rows breathe and scroll horizontally. */
   [class*="space-y"] > div,
   article,
   .card {

@@ -2,7 +2,7 @@ const AIMAR_MOBILE_QUERY = '(max-width: 760px), (pointer: coarse)';
 const isMobile = () => window.matchMedia(AIMAR_MOBILE_QUERY).matches;
 
 function ensureFavicon() {
-  const href = '/favicon.svg?v=7';
+  const href = '/ari-v2/favicon.svg?v=8';
   document.querySelectorAll('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]').forEach(link => link.remove());
   [
     ['icon', 'image/svg+xml'],
@@ -26,7 +26,7 @@ function loadDesktopIdentity() {
   ensureFavicon();
   const script = document.createElement('script');
   script.type = 'module';
-  script.src = '/aimar-logo.js?v=7';
+  script.src = '/aimar-logo.js?v=8';
   document.body.appendChild(script);
 }
 
