@@ -23,5 +23,5 @@ The public deck is a Vite + React single-page command surface with static public
 1. Replace runtime DOM-injected enhancements with first-class React components.
 2. Collapse overlapping logo CSS files into one maintained identity file.
 3. Add a dedicated mobile module list view as an alternative to forced deck routing.
-4. Run local Lighthouse once Cursor/Codex/local dev environment is active.
+4. Run Lighthouse locally in the development environment.
 5. Add build/test checks to a lightweight CI workflow.
