@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   Activity,
   AlertTriangle,
@@ -6,7 +6,6 @@ import {
   ChevronRight,
   Clock,
   Command,
-  Cpu,
   Database,
   Eye,
   EyeOff,
@@ -19,7 +18,6 @@ import {
   Search,
   ShieldAlert,
   ShieldCheck,
-  Terminal,
   X
 } from 'lucide-react'
 
@@ -498,7 +496,7 @@ function FounderContact({ mode, shareSafe }) {
   )
 }
 
-function Final({ mode, shareSafe }) {
+function Final() {
   return <div className="flex h-full flex-col items-center justify-center text-center"><Command size={44} className="mb-8 text-slate-700" strokeWidth={1} /><h2 className="max-w-3xl text-5xl font-semibold tracking-tight text-white">AIMAR builds operational <span className={ui.cyan}>intelligence infrastructure.</span></h2><div className="mt-10 grid gap-x-8 gap-y-4 text-left font-mono text-sm text-slate-400 md:grid-cols-3">{['Memory Systems', 'Workflow Engines', 'Dashboards', 'Research Artifacts', 'Governed Automations', 'Execution Systems'].map(item => <div key={item} className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-cyan-300" />{item}</div>)}</div><p className="mt-12 border-t border-white/10 pt-8 text-xl text-slate-300">For people and teams that need cleaner execution.</p><a href="mailto:ari@aimar.store" className={`mt-5 font-mono text-sm ${ui.cyan}`}>ari@aimar.store</a></div>
 }
 
@@ -557,7 +555,7 @@ export default function App() {
   }, [next, prev, paletteOpen])
 
   const commands = useMemo(() => [
-    ...slideList.map(([id, name, Component, keywords], index) => ({ id, name, keywords, description: `Jump to ${name}`, run: () => setCurrent(index) })),
+    ...slideList.map(([id, name, , keywords], index) => ({ id, name, keywords, description: `Jump to ${name}`, run: () => setCurrent(index) })),
     ...modes.map(item => ({ id: `mode-${item.id}`, name: `Switch to ${item.label} Mode`, keywords: `mode ${item.id}`, description: 'Change presentation lens', run: () => setMode(item.id) })),
     { id: 'share-safe', name: shareSafe ? 'Disable Share-Safe' : 'Enable Share-Safe', keywords: 'share safe public private sensitive', description: 'Toggle public-safe label filtering', run: () => setShareSafe(value => !value) }
   ], [shareSafe])
