@@ -1,0 +1,213 @@
+:root {
+  --aimar-brand-ink: #f5f7f8;
+  --aimar-brand-muted: #8f98a4;
+}
+
+.aimar-header-mark,
+.aimar-hero-mark {
+  display: block;
+  flex: 0 0 auto;
+  background: currentColor;
+  -webkit-mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: contain;
+}
+
+.aimar-header-mark {
+  width: 18px;
+  height: 18px;
+  -webkit-mask-image: url("/brand/aimar-mark-small.svg");
+  mask-image: url("/brand/aimar-mark-small.svg");
+}
+
+.aimar-hero {
+  position: relative;
+  min-height: min(68vh, 720px);
+  padding: 5rem 3rem 3.25rem;
+  overflow: visible;
+  border-radius: 2.25rem;
+}
+
+.aimar-hero::before {
+  content: "Public command surface initialized";
+  position: static;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  margin: 0 0 2rem;
+  padding: 7px 15px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  color: rgba(148, 163, 184, 0.76);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  white-space: nowrap;
+  transform: none;
+}
+
+.aimar-hero-mark {
+  width: clamp(108px, 11vw, 150px);
+  height: clamp(108px, 11vw, 150px);
+  margin-bottom: 2.25rem;
+  color: var(--aimar-brand-ink);
+  -webkit-mask-image: url("/brand/aimar-mark.svg");
+  mask-image: url("/brand/aimar-mark.svg");
+}
+
+.aimar-wordmark {
+  margin: 0;
+  color: var(--aimar-brand-ink);
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+  font-size: clamp(4rem, 9vw, 8rem);
+  font-weight: 650;
+  font-kerning: normal;
+  letter-spacing: -0.065em;
+  line-height: 0.88;
+  text-rendering: geometricPrecision;
+}
+
+.aimar-descriptor {
+  font-size: 11px;
+  letter-spacing: 0.25em;
+}
+
+@media (max-width: 760px) {
+  .aimar-hero {
+    min-height: 620px;
+    padding: 4.75rem 1.25rem 2.75rem;
+  }
+
+  .aimar-hero::before {
+    max-width: calc(100% - 28px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .aimar-hero-mark {
+    width: 104px;
+    height: 104px;
+    margin-bottom: 1.75rem;
+  }
+
+  .aimar-wordmark {
+    font-size: clamp(3.6rem, 18vw, 5.8rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aimar-header-mark,
+  .aimar-hero-mark,
+  .aimar-wordmark {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* Use a real layout element instead of generated badge content. */
+.aimar-hero::before {
+  content: none !important;
+  display: none !important;
+}
+
+.aimar-status-badge {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 clamp(1.25rem, 2.5vh, 2rem);
+  padding: 7px 15px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 999px;
+  color: rgba(148, 163, 184, 0.76);
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+@media (min-width: 761px) and (max-height: 900px) {
+  .aimar-hero {
+    padding: 2.25rem 2.5rem 1.75rem;
+  }
+
+  .aimar-status-badge {
+    margin-bottom: 1rem;
+  }
+
+  .aimar-hero-mark {
+    width: 112px;
+    height: 112px;
+    margin-bottom: 1.35rem;
+  }
+
+  .aimar-wordmark {
+    font-size: clamp(4.5rem, 7.5vw, 6.5rem);
+  }
+
+  .aimar-descriptor {
+    margin-top: 0.85rem !important;
+  }
+
+  .aimar-descriptor + p {
+    margin-top: 2rem !important;
+  }
+
+  .aimar-hero > div:last-child {
+    margin-top: 1.5rem !important;
+  }
+}
+
+/* Refine hero identity hierarchy. */
+:root {
+  --aimar-brand-accent: #75cbde;
+}
+
+.aimar-hero-mark {
+  width: clamp(128px, 13vw, 168px);
+  height: clamp(128px, 13vw, 168px);
+  margin-bottom: 1.75rem;
+  color: var(--aimar-brand-accent);
+}
+
+@media (min-width: 761px) and (max-height: 900px) {
+  .aimar-hero-mark {
+    width: 136px;
+    height: 136px;
+    margin-bottom: 1.6rem;
+  }
+
+  .aimar-wordmark {
+    font-size: clamp(4.4rem, 7vw, 6.15rem);
+  }
+}
+
+@media (max-width: 760px) {
+  .aimar-hero-mark {
+    width: 112px;
+    height: 112px;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Prevent legacy identity styles from appending version text. */
+.aimar-descriptor::before,
+.aimar-descriptor::after {
+  content: none !important;
+  display: none !important;
+}

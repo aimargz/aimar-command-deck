@@ -291,13 +291,17 @@ function Hero({ mode, shareSafe }) {
   }[mode]
 
   return (
-    <div className="flex h-full flex-col items-center justify-center text-center">
-      <div className="aurora-orb relative mb-10">
-        <div className="absolute inset-0 rounded-full bg-cyan-400/20 blur-3xl" />
-        <Command className={`relative ${ui.cyan}`} size={70} strokeWidth={1} />
+    <div className="aimar-hero flex h-full flex-col items-center justify-center text-center">
+      <div className="aimar-status-badge">
+        Public command surface initialized
       </div>
-      <h1 className="text-7xl font-semibold tracking-[-0.07em] text-white md:text-8xl">AIMAR</h1>
-      <p className={`mt-5 font-mono text-sm uppercase tracking-[0.45em] ${ui.cyan}`}>Command Deck</p>
+      <span
+        className="aimar-hero-mark"
+        role="img"
+        aria-label="AIMAR Folded AM mark"
+      />
+      <h1 className="aimar-wordmark">AIMAR</h1>
+      <p className={`aimar-descriptor mt-5 font-mono uppercase ${ui.cyan}`}>Command Deck</p>
       <p className="mt-10 max-w-3xl text-xl font-light leading-relaxed text-slate-300">
         Applied Intelligence Mainframe, Automation, and Research. {descriptor}
       </p>
@@ -557,7 +561,11 @@ export default function App() {
       <div className="fixed inset-0 opacity-[.05]" style={{ backgroundImage: 'linear-gradient(#fff 1px,transparent 1px),linear-gradient(90deg,#fff 1px,transparent 1px)', backgroundSize: '42px 42px' }} />
       <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} commands={commands} runCommand={runCommand} />
       <header className={`relative z-20 flex h-14 items-center justify-between border-b ${ui.border} ${ui.panel} px-4 md:px-6`}>
-        <div className="flex min-w-0 items-center gap-3"><Command className={ui.cyan} size={18} /><span className="font-semibold text-white">AIMAR OS</span><span className={`hidden font-mono text-xs uppercase tracking-[0.25em] ${ui.muted} xl:inline`}>Command Deck</span></div>
+        <div className="flex min-w-0 items-center gap-3">
+          <span className={`aimar-header-mark ${ui.cyan}`} aria-hidden="true" />
+          <span className="font-semibold text-white">AIMAR OS</span>
+          <span className={`hidden font-mono text-xs uppercase tracking-[0.25em] ${ui.muted} xl:inline`}>Command Deck</span>
+        </div>
         <ModeSwitcher mode={mode} setMode={setMode} />
         <div className="flex items-center gap-3 font-mono text-xs">
           <MagneticButton
