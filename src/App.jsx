@@ -194,7 +194,7 @@ function Header({ icon: Icon, title, subtitle, mode, shareSafe }) {
   )
 }
 
-function Card({ children, className = '', tilt = true }) {
+function Card({ children, className = '', tilt = false }) {
   const ref = useRef(null)
   const reduced = useReducedMotion()
 
@@ -220,23 +220,8 @@ function Card({ children, className = '', tilt = true }) {
 }
 
 function MagneticButton({ children, className = '', disabled, ...props }) {
-  const ref = useRef(null)
-  const reduced = useReducedMotion()
-
-  const move = useCallback((event) => {
-    if (disabled || reduced || !ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    const mx = event.clientX - (rect.left + rect.width / 2)
-    const my = event.clientY - (rect.top + rect.height / 2)
-    ref.current.style.transform = `translate(${mx * 0.1}px, ${my * 0.1}px)`
-  }, [disabled, reduced])
-
-  const reset = useCallback(() => {
-    if (ref.current) ref.current.style.transform = ''
-  }, [])
-
   return (
-    <button ref={ref} disabled={disabled} onPointerMove={move} onPointerLeave={reset} onBlur={reset} className={`magnetic-button ${className}`} {...props}>
+    <button disabled={disabled} className={`magnetic-button ${className}`} {...props}>
       {children}
     </button>
   )
@@ -575,7 +560,15 @@ export default function App() {
         <div className="flex min-w-0 items-center gap-3"><Command className={ui.cyan} size={18} /><span className="font-semibold text-white">AIMAR OS</span><span className={`hidden font-mono text-xs uppercase tracking-[0.25em] ${ui.muted} xl:inline`}>Command Deck</span></div>
         <ModeSwitcher mode={mode} setMode={setMode} />
         <div className="flex items-center gap-3 font-mono text-xs">
-          <MagneticButton onClick={() => setPaletteOpen(true)} className={`hidden rounded-full border ${ui.border2} px-3 py-1 text-slate-400 hover:text-white md:inline-flex`}><Search size={13} className="mr-2" />Cmd K</MagneticButton>
+          <MagneticButton
+            type="button"
+            aria-label="Open command palette"
+            onClick={() => setPaletteOpen(true)}
+            className={`inline-flex items-center rounded-full border ${ui.border2} p-2 text-slate-400 hover:text-white md:px-3 md:py-1`}
+          >
+            <Search size={13} className="md:mr-2" />
+            <span className="hidden md:inline">Cmd K</span>
+          </MagneticButton>
           <MagneticButton onClick={() => setShareSafe(value => !value)} className={`rounded-full border px-3 py-1 ${shareSafe ? 'border-green-500/25 bg-green-500/10 text-green-400' : `${ui.border2} text-slate-400`}`}>{shareSafe ? <EyeOff size={13} className="mr-2" /> : <Eye size={13} className="mr-2" />}{shareSafe ? 'Safe' : 'Internal'}</MagneticButton>
           <span className="hidden items-center gap-2 text-slate-500 lg:flex"><Clock size={13} />{clock}</span>
         </div>

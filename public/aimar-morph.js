@@ -1,15 +1,12 @@
-const AIMAR_MORPH_MS = 420;
-const AIMAR_LOCK_MS = 820;
-const DESKTOP_GESTURE_LOCK_MS = 1450;
-const WHEEL_THRESHOLD = 96;
-const WHEEL_RESET_MS = 260;
+const AIMAR_LOCK_MS = 650;
+const WHEEL_THRESHOLD = 72;
+const WHEEL_RESET_MS = 180;
 const SWIPE_THRESHOLD = 86;
 
 let locked = false;
 let wheelTotal = 0;
 let lastWheelAt = 0;
 let lastRouteAt = 0;
-let wheelGestureLockedUntil = 0;
 let wheelReleaseTimer = null;
 let touchStartX = 0;
 let touchStartY = 0;
@@ -35,6 +32,28 @@ function isScrollableTarget(target) {
     if (canScrollY || canScrollX) return true;
     node = node.parentElement;
   }
+  return false;
+}
+
+function canScrollInDirection(target, delta) {
+  let node = target;
+
+  while (node && node !== document.body && node !== document.documentElement) {
+    const style = window.getComputedStyle(node);
+    const scrollable = /(auto|scroll)/.test(style.overflowY)
+      && node.scrollHeight > node.clientHeight + 8;
+
+    if (scrollable) {
+      const atTop = node.scrollTop <= 1;
+      const atBottom = node.scrollTop + node.clientHeight >= node.scrollHeight - 1;
+
+      if (delta < 0 && !atTop) return true;
+      if (delta > 0 && !atBottom) return true;
+    }
+
+    node = node.parentElement;
+  }
+
   return false;
 }
 
@@ -82,20 +101,10 @@ function route(direction) {
   locked = true;
   lastRouteAt = now;
   wheelTotal = 0;
-  wheelGestureLockedUntil = now + DESKTOP_GESTURE_LOCK_MS;
 
-  const body = document.body;
-  body.classList.remove('aimar-morph-forward', 'aimar-morph-back', 'aimar-morph-settle');
-  body.classList.add(direction > 0 ? 'aimar-morph-forward' : 'aimar-morph-back');
+  button.click();
 
   window.setTimeout(() => {
-    button.click();
-    body.classList.remove('aimar-morph-forward', 'aimar-morph-back');
-    body.classList.add('aimar-morph-settle');
-  }, Math.floor(AIMAR_MORPH_MS * 0.48));
-
-  window.setTimeout(() => {
-    body.classList.remove('aimar-morph-settle');
     locked = false;
   }, AIMAR_LOCK_MS);
 
@@ -104,39 +113,37 @@ function route(direction) {
 
 function onWheel(event) {
   const paletteOpen = document.querySelector('.fixed.inset-0.z-50');
-  if (paletteOpen || event.ctrlKey || isTypingTarget(event.target) || isInteractiveTarget(event.target)) return;
 
-  const now = performance.now();
-  const primary = normalizeWheel(event);
-  if (!primary) return;
-
-  event.preventDefault();
-
-  if (wheelReleaseTimer) window.clearTimeout(wheelReleaseTimer);
-  wheelReleaseTimer = window.setTimeout(() => {
-    wheelTotal = 0;
-    wheelGestureLockedUntil = 0;
-  }, 360);
-
-  if (!isMobile() && (locked || now < wheelGestureLockedUntil)) {
+  if (
+    paletteOpen
+    || event.ctrlKey
+    || isTypingTarget(event.target)
+    || isInteractiveTarget(event.target)
+  ) {
     return;
   }
 
-  if (now - lastWheelAt > WHEEL_RESET_MS || Math.sign(primary) !== Math.sign(wheelTotal || primary)) {
+  const primary = normalizeWheel(event);
+  if (!primary || canScrollInDirection(event.target, primary) || locked) return;
+
+  if (wheelReleaseTimer) window.clearTimeout(wheelReleaseTimer);
+
+  wheelReleaseTimer = window.setTimeout(() => {
+    wheelTotal = 0;
+  }, WHEEL_RESET_MS);
+
+  if (
+    performance.now() - lastWheelAt > WHEEL_RESET_MS
+    || Math.sign(primary) !== Math.sign(wheelTotal || primary)
+  ) {
     wheelTotal = 0;
   }
 
-  lastWheelAt = now;
+  lastWheelAt = performance.now();
   wheelTotal += primary;
 
-  const fastIntent = Math.abs(primary) >= 82;
-  const accumulatedIntent = Math.abs(wheelTotal) >= WHEEL_THRESHOLD;
-
-  if (fastIntent || accumulatedIntent) {
-    const didRoute = route((fastIntent ? primary : wheelTotal) > 0 ? 1 : -1);
-    if (didRoute && !isMobile()) {
-      wheelGestureLockedUntil = performance.now() + DESKTOP_GESTURE_LOCK_MS;
-    }
+  if (Math.abs(wheelTotal) >= WHEEL_THRESHOLD) {
+    route(wheelTotal > 0 ? 1 : -1);
   }
 }
 
@@ -172,7 +179,7 @@ function onTouchEnd(event) {
 function boot() {
   document.body.classList.add('aimar-morph-ready');
   ensureToolLinks();
-  window.addEventListener('wheel', onWheel, { passive: false });
+  window.addEventListener('wheel', onWheel, { passive: true });
   window.addEventListener('touchstart', onTouchStart, { passive: true });
   window.addEventListener('touchend', onTouchEnd, { passive: true });
 }

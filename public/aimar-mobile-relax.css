@@ -98,8 +98,21 @@
   }
 
   main section .grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: minmax(0, 1fr) !important;
     gap: 1rem !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  main section .grid > *,
+  main section .motion-card {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+
+  main section .overflow-x-auto {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .motion-card,
