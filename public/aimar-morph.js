@@ -73,22 +73,6 @@ function canClick(button) {
   return button && !button.disabled && button.getAttribute('aria-disabled') !== 'true';
 }
 
-function ensureFloatingLink(href, className, text, bottom) {
-  if (isMobile() || document.querySelector(`.${className}`)) return;
-  const link = document.createElement('a');
-  link.href = href;
-  link.className = `aimar-floating-link ${className}`;
-  link.textContent = text;
-  link.style.bottom = bottom;
-  document.body.appendChild(link);
-}
-
-function ensureToolLinks() {
-  ensureFloatingLink('/nested-tools.html', 'aimar-tools-link', 'Nested Tools', '86px');
-  ensureFloatingLink('/about.html', 'aimar-about-link', 'What Aimar Does', '132px');
-  ensureFloatingLink('/contact.html', 'aimar-contact-link', 'Contact', '178px');
-}
-
 function route(direction) {
   const now = performance.now();
   if (locked || now - lastRouteAt < AIMAR_LOCK_MS) return false;
@@ -178,7 +162,6 @@ function onTouchEnd(event) {
 
 function boot() {
   document.body.classList.add('aimar-morph-ready');
-  ensureToolLinks();
   window.addEventListener('wheel', onWheel, { passive: true });
   window.addEventListener('touchstart', onTouchStart, { passive: true });
   window.addEventListener('touchend', onTouchEnd, { passive: true });

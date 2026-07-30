@@ -144,7 +144,8 @@ body::after {
     radial-gradient(circle at 25% 25%, rgba(255,255,255,.9) 0 1px, transparent 1px),
     radial-gradient(circle at 75% 75%, rgba(119,247,255,.85) 0 1px, transparent 1px);
   background-size: 7px 7px, 11px 11px;
-  animation: v2Noise 10s steps(5) infinite;
+  animation: none;
+  transform: none;
 }
 
 header, aside, footer {

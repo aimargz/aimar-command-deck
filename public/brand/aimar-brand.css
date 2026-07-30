@@ -1,6 +1,6 @@
 :root {
   --aimar-brand-ink: #f5f7f8;
-  --aimar-brand-muted: #8f98a4;
+  --aimar-brand-accent: #75cbde;
 }
 
 .aimar-header-mark,
@@ -31,30 +31,32 @@
   border-radius: 2.25rem;
 }
 
-.aimar-hero::before {
-  content: "Public command surface initialized";
-  position: static;
+.aimar-status-badge {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
-  align-self: center;
-  margin: 0 0 2rem;
+  margin: 0 0 clamp(1.25rem, 2.5vh, 2rem);
   padding: 7px 15px;
   border: 1px solid rgba(148, 163, 184, 0.2);
   border-radius: 999px;
   color: rgba(148, 163, 184, 0.76);
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-family:
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
   font-size: 10px;
   letter-spacing: 0.18em;
+  line-height: 1.2;
   white-space: nowrap;
-  transform: none;
 }
 
 .aimar-hero-mark {
-  width: clamp(108px, 11vw, 150px);
-  height: clamp(108px, 11vw, 150px);
-  margin-bottom: 2.25rem;
-  color: var(--aimar-brand-ink);
+  width: clamp(128px, 13vw, 168px);
+  height: clamp(128px, 13vw, 168px);
+  margin-bottom: 1.75rem;
+  color: var(--aimar-brand-accent);
   -webkit-mask-image: url("/brand/aimar-mark.svg");
   mask-image: url("/brand/aimar-mark.svg");
 }
@@ -81,64 +83,10 @@
   letter-spacing: 0.25em;
 }
 
-@media (max-width: 760px) {
-  .aimar-hero {
-    min-height: 620px;
-    padding: 4.75rem 1.25rem 2.75rem;
-  }
-
-  .aimar-hero::before {
-    max-width: calc(100% - 28px);
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .aimar-hero-mark {
-    width: 104px;
-    height: 104px;
-    margin-bottom: 1.75rem;
-  }
-
-  .aimar-wordmark {
-    font-size: clamp(3.6rem, 18vw, 5.8rem);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .aimar-header-mark,
-  .aimar-hero-mark,
-  .aimar-wordmark {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-
-/* Use a real layout element instead of generated badge content. */
-.aimar-hero::before {
+.aimar-descriptor::before,
+.aimar-descriptor::after {
   content: none !important;
   display: none !important;
-}
-
-.aimar-status-badge {
-  display: inline-flex;
-  flex: 0 0 auto;
-  align-items: center;
-  justify-content: center;
-  margin: 0 0 clamp(1.25rem, 2.5vh, 2rem);
-  padding: 7px 15px;
-  border: 1px solid rgba(148, 163, 184, 0.2);
-  border-radius: 999px;
-  color: rgba(148, 163, 184, 0.76);
-  font-family:
-    ui-monospace,
-    SFMono-Regular,
-    Menlo,
-    monospace;
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  line-height: 1.2;
-  white-space: nowrap;
 }
 
 @media (min-width: 761px) and (max-height: 900px) {
@@ -151,13 +99,13 @@
   }
 
   .aimar-hero-mark {
-    width: 112px;
-    height: 112px;
-    margin-bottom: 1.35rem;
+    width: 136px;
+    height: 136px;
+    margin-bottom: 1.6rem;
   }
 
   .aimar-wordmark {
-    font-size: clamp(4.5rem, 7.5vw, 6.5rem);
+    font-size: clamp(4.4rem, 7vw, 6.15rem);
   }
 
   .aimar-descriptor {
@@ -173,41 +121,34 @@
   }
 }
 
-/* Refine hero identity hierarchy. */
-:root {
-  --aimar-brand-accent: #75cbde;
-}
-
-.aimar-hero-mark {
-  width: clamp(128px, 13vw, 168px);
-  height: clamp(128px, 13vw, 168px);
-  margin-bottom: 1.75rem;
-  color: var(--aimar-brand-accent);
-}
-
-@media (min-width: 761px) and (max-height: 900px) {
-  .aimar-hero-mark {
-    width: 136px;
-    height: 136px;
-    margin-bottom: 1.6rem;
-  }
-
-  .aimar-wordmark {
-    font-size: clamp(4.4rem, 7vw, 6.15rem);
-  }
-}
-
 @media (max-width: 760px) {
+  .aimar-hero {
+    min-height: 620px;
+    padding: 4.75rem 1.25rem 2.75rem;
+  }
+
+  .aimar-status-badge {
+    max-width: calc(100% - 28px);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .aimar-hero-mark {
     width: 112px;
     height: 112px;
     margin-bottom: 1.5rem;
   }
+
+  .aimar-wordmark {
+    font-size: clamp(3.6rem, 18vw, 5.8rem);
+  }
 }
 
-/* Prevent legacy identity styles from appending version text. */
-.aimar-descriptor::before,
-.aimar-descriptor::after {
-  content: none !important;
-  display: none !important;
+@media (prefers-reduced-motion: reduce) {
+  .aimar-header-mark,
+  .aimar-hero-mark,
+  .aimar-wordmark {
+    animation: none !important;
+    transition: none !important;
+  }
 }
