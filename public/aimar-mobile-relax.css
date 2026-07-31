@@ -170,3 +170,42 @@
     height: 7.5rem !important;
   }
 }
+
+@media (max-width: 480px) {
+  header {
+    padding-left: .75rem !important;
+    padding-right: .75rem !important;
+  }
+
+  header > div:first-child {
+    flex: 0 1 auto !important;
+    min-width: 0 !important;
+    gap: .6rem !important;
+  }
+
+  header > div:first-child .font-semibold {
+    font-size: .95rem !important;
+    white-space: nowrap !important;
+  }
+
+  header > div:last-child {
+    flex: 0 0 auto !important;
+    gap: .45rem !important;
+  }
+
+  .aimar-header-mark {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .share-safe-toggle {
+    width: 36px !important;
+    min-width: 36px !important;
+    height: 36px !important;
+    padding: 0 !important;
+  }
+
+  .share-safe-label {
+    display: none !important;
+  }
+}

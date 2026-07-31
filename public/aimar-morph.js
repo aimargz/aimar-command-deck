@@ -1,6 +1,7 @@
 const AIMAR_LOCK_MS = 650;
-const WHEEL_THRESHOLD = 72;
-const WHEEL_RESET_MS = 180;
+const WHEEL_THRESHOLD = 48;
+const WHEEL_RESET_MS = 260;
+const SCROLL_EDGE_PX = 24;
 const SWIPE_THRESHOLD = 86;
 
 let locked = false;
@@ -23,17 +24,6 @@ function isInteractiveTarget(target) {
   return Boolean(target?.closest?.('a, button, input, textarea, select, [role="button"], [contenteditable="true"]'));
 }
 
-function isScrollableTarget(target) {
-  let node = target;
-  while (node && node !== document.body && node !== document.documentElement) {
-    const style = window.getComputedStyle(node);
-    const canScrollY = /(auto|scroll)/.test(style.overflowY) && node.scrollHeight > node.clientHeight + 8;
-    const canScrollX = /(auto|scroll)/.test(style.overflowX) && node.scrollWidth > node.clientWidth + 8;
-    if (canScrollY || canScrollX) return true;
-    node = node.parentElement;
-  }
-  return false;
-}
 
 function canScrollInDirection(target, delta) {
   let node = target;
@@ -44,8 +34,9 @@ function canScrollInDirection(target, delta) {
       && node.scrollHeight > node.clientHeight + 8;
 
     if (scrollable) {
-      const atTop = node.scrollTop <= 1;
-      const atBottom = node.scrollTop + node.clientHeight >= node.scrollHeight - 1;
+      const atTop = node.scrollTop <= SCROLL_EDGE_PX;
+      const atBottom = node.scrollTop + node.clientHeight
+        >= node.scrollHeight - SCROLL_EDGE_PX;
 
       if (delta < 0 && !atTop) return true;
       if (delta > 0 && !atBottom) return true;
@@ -53,6 +44,16 @@ function canScrollInDirection(target, delta) {
 
     node = node.parentElement;
   }
+
+  const page = document.scrollingElement;
+  if (!page || page.scrollHeight <= page.clientHeight + 8) return false;
+
+  const atTop = page.scrollTop <= SCROLL_EDGE_PX;
+  const atBottom = page.scrollTop + page.clientHeight
+    >= page.scrollHeight - SCROLL_EDGE_PX;
+
+  if (delta < 0 && !atTop) return true;
+  if (delta > 0 && !atBottom) return true;
 
   return false;
 }
@@ -141,7 +142,7 @@ function onTouchStart(event) {
 
 function onTouchEnd(event) {
   const touch = event.changedTouches?.[0];
-  if (!touch || isTypingTarget(event.target) || isInteractiveTarget(event.target) || isScrollableTarget(event.target)) return;
+  if (!touch || isTypingTarget(event.target) || isInteractiveTarget(event.target)) return;
 
   const dx = touch.clientX - touchStartX;
   const dy = touch.clientY - touchStartY;
@@ -151,7 +152,11 @@ function onTouchEnd(event) {
   if (isMobile()) {
     const mostlyVertical = Math.abs(dy) > Math.abs(dx) * 1.55;
     if (!mostlyVertical || Math.abs(dy) < SWIPE_THRESHOLD) return;
-    route(dy < 0 ? 1 : -1);
+
+    const direction = dy < 0 ? 1 : -1;
+    if (canScrollInDirection(event.target, direction)) return;
+
+    route(direction);
     return;
   }
 
@@ -162,7 +167,6 @@ function onTouchEnd(event) {
 
 function boot() {
   document.body.classList.add('aimar-morph-ready');
-  window.addEventListener('wheel', onWheel, { passive: true });
   window.addEventListener('touchstart', onTouchStart, { passive: true });
   window.addEventListener('touchend', onTouchEnd, { passive: true });
 }

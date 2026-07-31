@@ -169,22 +169,6 @@ main section > div:first-child > div.flex.h-full.flex-col.items-center.justify-c
     0 32px 120px rgba(0,0,0,.42),
     0 0 70px rgba(119,247,255,.06);
 }
-main section > div:first-child > div.flex.h-full.flex-col.items-center.justify-center.text-center::before {
-  content: 'PUBLIC COMMAND SURFACE INITIALIZED';
-  position: absolute;
-  top: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 999px;
-  background: rgba(0,0,0,.36);
-  padding: .55rem .9rem;
-  color: rgba(226,232,240,.68);
-  font: 10px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  letter-spacing: .22em;
-  white-space: nowrap;
-  backdrop-filter: blur(16px);
-}
 main section > div:first-child > div.flex.h-full.flex-col.items-center.justify-center.text-center::after {
   content: '';
   position: absolute;

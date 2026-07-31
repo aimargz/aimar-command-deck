@@ -515,6 +515,24 @@ export default function App() {
   const next = useCallback(() => setCurrent(index => Math.min(index + 1, slideList.length - 1)), [])
   const prev = useCallback(() => setCurrent(index => Math.max(index - 1, 0)), [])
 
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      document.querySelector('main section')?.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'auto'
+      })
+
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'auto'
+      })
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [current])
+
   const moveSpotlight = useCallback((event) => {
     if (!rootRef.current) return
     rootRef.current.style.setProperty('--mx', `${event.clientX}px`)
@@ -577,7 +595,15 @@ export default function App() {
             <Search size={13} className="md:mr-2" />
             <span className="hidden md:inline">Cmd K</span>
           </MagneticButton>
-          <MagneticButton onClick={() => setShareSafe(value => !value)} className={`rounded-full border px-3 py-1 ${shareSafe ? 'border-green-500/25 bg-green-500/10 text-green-400' : `${ui.border2} text-slate-400`}`}>{shareSafe ? <EyeOff size={13} className="mr-2" /> : <Eye size={13} className="mr-2" />}{shareSafe ? 'Safe' : 'Internal'}</MagneticButton>
+          <MagneticButton
+            type="button"
+            aria-label={shareSafe ? 'Disable Share-Safe' : 'Enable Share-Safe'}
+            onClick={() => setShareSafe(value => !value)}
+            className={`share-safe-toggle inline-flex items-center justify-center rounded-full border px-3 py-1 ${shareSafe ? 'border-green-500/25 bg-green-500/10 text-green-400' : `${ui.border2} text-slate-400`}`}
+          >
+            {shareSafe ? <EyeOff size={13} /> : <Eye size={13} />}
+            <span className="share-safe-label ml-2">{shareSafe ? 'Safe' : 'Internal'}</span>
+          </MagneticButton>
           <span className="hidden items-center gap-2 text-slate-500 lg:flex"><Clock size={13} />{clock}</span>
         </div>
       </header>
